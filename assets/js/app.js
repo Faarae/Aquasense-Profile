@@ -73,7 +73,7 @@ home:()=>`<section class="hero"><canvas id="cv"></canvas>
 <section class="w dd2" style="text-align:center;padding-block:clamp(90px,14vw,180px)"><h2 class="mk" style="margin:auto;max-width:14ch;color:var(--on)">Let’s grow a smarter future together.</h2><p style="margin:24px auto;color:#c9dcc0">For partners, farmers, researchers and curious minds.</p>${L("contact","Start a conversation","btn")} ${L("technology","Read the technology","btn o")}</section>`,
 technology:()=>`<div class="w pg">${BC([0,"Technology"])}<p class="eb">Technology</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">One system, end to end.</h1><p>Select a stage, then open its page for the details.</p>${DGM()}<div class="gr">${tcards()}</div></div>`,
 achievement:()=>`<section class="w dk pg"><p class="eb">Achievement</p><p class="aw">Gold Award</p><h2>World Young Inventors Exhibition 2026</h2><div class="sp" style="margin-top:56px">${IM("team","The team with the WYIE Gold Award certificate and medal")}<div><h3>The story</h3><p>A multidisciplinary Universitas Brawijaya team entered AQUASENSE at WYIE 2026, part of ITEX, in Kuala Lumpur in May 2026. Its official title: “Dual-Brain Edge AI for Fully Autonomous and Offline Aquaponics Monitoring.”</p><p>UB reports place the medal in the Agriculture category. In the final the team demonstrated AQUASENSE live and pitched to international judges and industry investors. Reports differ on the scale: FILKOM UB cites 600+ teams from 10 countries and territories, FTAB UB cites 1,000+ entries from 17 countries.</p></div></div></section>
-<section class="w"><div class="sp r"><div class="md rv"><img src="${IMG.medal.f}" alt="Front and back of the WYIE 2026 Gold Medal" loading="lazy" decoding="async"></div><div><p class="eb">The medal</p><h2 class="mk">Gold, Agriculture category.</h2><p class="rv">Awarded at the ITEX · WYIE 2026 awards presentation at KLCC, Kuala Lumpur, alongside a Gold Award certificate for AQUASENSE.</p></div></div></section>
+<section class="w"><div class="sp r"><div class="rv">${medal3d()}</div><div><p class="eb">Interactive 3D Medal</p><h2 class="mk">Gold, Agriculture category.</h2><p class="rv">Awarded at the ITEX · WYIE 2026 awards presentation at KLCC, Kuala Lumpur, alongside a Gold Award certificate for AQUASENSE.</p><p class="rv">Eksplorasi medali 3D: putar 360° secara interaktif untuk melihat sisi depan (WYIE 2026) dan sisi belakang (emblem MINDS), lengkap dengan tali pita pameran resmi.</p></div></div></section>
 <section class="w dk"><p class="eb">Award ceremony</p><h2 class="mk">The moment it was announced.</h2><div class="pg3">${[["stage","The WYIE 2026 awards stage"],["ceremony","With the UB flag at the ITEX 2026 awards presentation"],["cert","Holding the Gold Award certificate"]].map(x=>`<figure data-lb="${G.findIndex(g=>g[0]==x[0])}">${IM(x[0],x[1])}</figure>`).join("")}</div></section>
 <section class="w"><h2 class="mk">Seen on the day.</h2><div class="pg3">${[["proto","The prototype demonstration"],["display","Presenting the rig and the Gold Award at the booth"],["booth","The team at the AQUASENSE booth"]].map(x=>`<figure data-lb="${G.findIndex(g=>g[0]==x[0])}">${IM(x[0],x[1])}</figure>`).join("")}</div><p style="margin-top:28px">${L("gallery","View the full gallery","btn o")}</p></section>
 <section class="w dk"><h2 class="mk">Latest coverage.</h2><div class="pr">${PR.slice(0,3).map(p=>`<a class="rv" href="${p[5]}" target="_blank" rel="noopener"><span>${p[1]} · ${p[0]}</span><b>${p[3]}</b><span>Read ↗</span></a>`).join("")}</div><p style="margin-top:28px">${L("press","See all coverage","btn")}</p></section>
@@ -101,6 +101,142 @@ const rs=()=>{const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);ca
 (function f(){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
 const part=()=>`<div class="lgs">${[["ub","Universitas Brawijaya"],["filkom","FILKOM UB"],["ft","FT UB"],["ftab","FTAB UB"],["fib","FIB UB"],["fisip","FISIP UB"],["wyie","WYIE · ITEX"]].map(p=>`<span>${LOGOS[p[0]]?`<img src="${LOGOS[p[0]]}" alt="">`:""}${p[1]}</span>`).join("")}</div>`;
 
+/* 3D Gold Medal Component */
+const medal3d=()=>`
+<div class="medal-card">
+  <div class="medal-stage" id="mStage">
+    <div class="ribbon-wrap" id="mRibbon">
+      <svg class="ribbon-svg" viewBox="0 0 150 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="mRibL" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#00AEEF"/>
+            <stop offset="28%" stop-color="#0072BC"/>
+            <stop offset="38%" stop-color="#D4AF37"/>
+            <stop offset="50%" stop-color="#FFF2A1"/>
+            <stop offset="62%" stop-color="#D4AF37"/>
+            <stop offset="72%" stop-color="#E5196E"/>
+            <stop offset="100%" stop-color="#A0005C"/>
+          </linearGradient>
+          <linearGradient id="mRibR" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#00AEEF"/>
+            <stop offset="28%" stop-color="#0072BC"/>
+            <stop offset="38%" stop-color="#D4AF37"/>
+            <stop offset="50%" stop-color="#FFF2A1"/>
+            <stop offset="62%" stop-color="#D4AF37"/>
+            <stop offset="72%" stop-color="#E5196E"/>
+            <stop offset="100%" stop-color="#A0005C"/>
+          </linearGradient>
+          <linearGradient id="clipGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFE79A"/>
+            <stop offset="50%" stop-color="#C59B27"/>
+            <stop offset="100%" stop-color="#84610E"/>
+          </linearGradient>
+        </defs>
+        <path d="M42 0 L14 148 L64 162 L75 22 Z" fill="url(#mRibL)"/>
+        <path d="M108 0 L136 148 L86 162 L75 22 Z" fill="url(#mRibR)"/>
+        <path d="M64 162 L75 22 L86 162 Z" fill="rgba(0,0,0,0.18)"/>
+        <rect x="62" y="152" width="26" height="15" rx="3.5" fill="url(#clipGold)" stroke="#6B4E0A" stroke-width="1.2"/>
+        <circle cx="75" cy="164" r="4.5" fill="none" stroke="url(#clipGold)" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div class="medal-mount" id="mMount" aria-label="3D Interactive Gold Medal. Drag to rotate.">
+      <div class="medal-coin" id="mCoin">
+        <div class="coin-edge" style="transform:translateZ(5px)"></div>
+        <div class="coin-edge" style="transform:translateZ(3px)"></div>
+        <div class="coin-edge" style="transform:translateZ(1px)"></div>
+        <div class="coin-edge" style="transform:translateZ(-1px)"></div>
+        <div class="coin-edge" style="transform:translateZ(-3px)"></div>
+        <div class="coin-edge" style="transform:translateZ(-5px)"></div>
+        <div class="coin-face front">
+          <div class="coin-sheen" id="mSheenF"></div>
+        </div>
+        <div class="coin-face back">
+          <div class="coin-sheen" id="mSheenB"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="medal-ctrls">
+    <button type="button" id="mFlipBtn">⟲ Balik Medali</button>
+    <button type="button" id="mSpinBtn" class="active">▶ Putar Otomatis</button>
+    <button type="button" id="mRibbonBtn" class="active">🎗 Tali Medali: Aktif</button>
+  </div>
+  <p class="medal-hint">Sentuh / drag untuk putar 360° · Klik tombol untuk balik sisi medali</p>
+</div>`;
+
+function initMedal3d(){
+  const mount=$("#mMount"), coin=$("#mCoin"), ribbon=$("#mRibbon");
+  if(!mount || !coin) return;
+  let rotY = 0, rotX = 0, isDragging = false, startX = 0, startY = 0, autoSpin = true;
+  const sheenF = $("#mSheenF"), sheenB = $("#mSheenB");
+  const flipBtn = $("#mFlipBtn"), spinBtn = $("#mSpinBtn"), ribBtn = $("#mRibbonBtn");
+
+  const update = () => {
+    coin.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    const angle = 100 + (rotY % 180);
+    const grad = `linear-gradient(${angle}deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%)`;
+    if(sheenF) sheenF.style.background = grad;
+    if(sheenB) sheenB.style.background = grad;
+  };
+
+  let last = performance.now();
+  const loop = (now) => {
+    if(!mount.isConnected) return;
+    const dt = (now - last) / 1000;
+    last = now;
+    if(autoSpin && !isDragging) {
+      rotY = (rotY + 36 * dt) % 360;
+      update();
+    }
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+
+  mount.onpointerdown = e => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    coin.classList.remove("flipping");
+    mount.setPointerCapture(e.pointerId);
+  };
+
+  mount.onpointermove = e => {
+    if(!isDragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    startX = e.clientX;
+    startY = e.clientY;
+    rotY += dx * 0.75;
+    rotX = Math.max(-40, Math.min(40, rotX - dy * 0.6));
+    update();
+  };
+
+  const endDrag = () => { isDragging = false; };
+  mount.onpointerup = endDrag;
+  mount.onpointercancel = endDrag;
+
+  if(flipBtn) flipBtn.onclick = () => {
+    autoSpin = false;
+    if(spinBtn) { spinBtn.classList.remove("active"); spinBtn.textContent = "▶ Putar Otomatis"; }
+    coin.classList.add("flipping");
+    rotY = (Math.round(rotY / 180) + 1) * 180;
+    rotX = 0;
+    update();
+  };
+
+  if(spinBtn) spinBtn.onclick = () => {
+    autoSpin = !autoSpin;
+    spinBtn.classList.toggle("active", autoSpin);
+    spinBtn.textContent = autoSpin ? "▶ Putar Otomatis" : "⏸ Jeda Putar";
+  };
+
+  if(ribBtn && ribbon) ribBtn.onclick = () => {
+    const isHidden = ribbon.classList.toggle("hide");
+    ribBtn.classList.toggle("active", !isHidden);
+    ribBtn.textContent = isHidden ? "🎗 Tali Medali: Nonaktif" : "🎗 Tali Medali: Aktif";
+  };
+}
+
 
 // chrome
 const NL=()=>NV.map(n=>n[0]=="technology"?`<div><a href="#technology" data-r="technology">Technology ▾</a><div class="dm">${TL.map(t=>L(t[0],t[1])).join("")}</div></div>`:`<a href="#${n[0]}" data-r="${n[0]}">${n[1]}</a>`).join("");
@@ -115,7 +251,7 @@ function render(r){$("#app").innerHTML=P[r]();scrollTo(0,0);document.title=(r=="
 $$("[data-r]").forEach(a=>a.classList.toggle("on",r==a.dataset.r||(a.dataset.r=="technology"&&r.startsWith("technology"))));tm(0);init(r)}
 function nav(first){const r=name(),p=$("#pt");if(r===cur&&!first)return;cur=r;busy=1;p.classList.remove("up");p.classList.add("on");setTimeout(()=>{render(r);p.classList.add("up");p.classList.remove("on");setTimeout(()=>{p.classList.remove("up");p.style.transition="none";p.offsetWidth;p.style.transition="";busy=0},520)},rm?0:first?500:420)}
 addEventListener("hashchange",()=>nav());
-function init(r){$$("[data-logo]").forEach(e=>e.src=IMG.logo.f);boot3();
+function init(r){$$("[data-logo]").forEach(e=>e.src=IMG.logo.f);boot3();initMedal3d();
  $$(".mk").forEach(e=>{e.innerHTML=e.textContent.split(" ").map(w=>`<span><b>${w}</b></span> `).join("");e.querySelectorAll("b").forEach((b,i)=>b.style.transitionDelay=i*60+"ms")});
  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:0.01,rootMargin:"250px 0px"});$$(".rv,.mk,.np").forEach(e=>io.observe(e));setTimeout(()=>{$$(".rv:not(.in),.mk:not(.in),.np:not(.in)").forEach(e=>e.classList.add("in"))},2000);
  
