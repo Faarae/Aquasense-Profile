@@ -2,7 +2,23 @@
    AQUASENSE | Brawijaya Team: site content & behaviour
    Edit the CONTACT and data arrays below to update the site.
    ============================================================ */
-const LOGOS={}; // optional partner logos, e.g. {ub:"assets/img/logos/ub.png"}
+const LOGOS = {
+  ub: "assets/img/logo-ub.svg",
+  filkom: "assets/img/logo-filkom.png",
+  ft: "assets/img/logo-ft.svg",
+  ftab: "assets/img/logo-ftab.svg",
+  fib: "assets/img/logo-fib.svg",
+  fisip: "assets/img/logo-fisip.svg"
+};
+
+const FACULTIES_DATA = [
+  { id: "ub", name: "Universitas Brawijaya", desc: "Perguruan Tinggi Induk", logo: LOGOS.ub, link: "https://ub.ac.id" },
+  { id: "filkom", name: "FILKOM UB", desc: "Fakultas Ilmu Komputer", logo: LOGOS.filkom, link: "https://filkom.ub.ac.id" },
+  { id: "ft", name: "FT UB", desc: "Fakultas Teknik", logo: LOGOS.ft, link: "https://teknik.ub.ac.id" },
+  { id: "ftab", name: "FTAB UB", desc: "Fakultas Teknologi Agroindustri & Biosistem", logo: LOGOS.ftab, link: "https://ub.ac.id" },
+  { id: "fib", name: "FIB UB", desc: "Fakultas Ilmu Budaya", logo: LOGOS.fib, link: "https://fib.ub.ac.id" },
+  { id: "fisip", name: "FISIP UB", desc: "Fakultas Ilmu Sosial & Ilmu Politik", logo: LOGOS.fisip, link: "https://fisip.ub.ac.id" }
+];
 
 /* Contact details: fill in any of these and they appear on the Contact page.
    EMAIL also enables the contact form (opens the visitor's mail app). */
@@ -69,11 +85,10 @@ home:()=>`<section class="hero"><canvas id="cv"></canvas>
 <section class="w dk dd2"><div class="sp r"><div>${IM("team","The team with the WYIE Gold Award")}</div><div><p class="eb">Gold Medal</p><p class="aw" style="font-size:clamp(3rem,9vw,7rem)">Gold<br>Award</p><h3 style="margin:20px 0 6px;font-weight:500">World Young Inventors Exhibition 2026</h3><p>AQUASENSE won Gold in the Agriculture category at WYIE 2026 in Kuala Lumpur. In the final the team demonstrated the system live and pitched to international judges and investors.</p><p>${L("achievement","Explore our achievement","btn")} ${L("press","Read the press","btn o")}</p></div></div></section>
 <section class="w"><div style="display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:16px"><h2 class="mk">Moments.</h2>${L("gallery","View all gallery","btn o")}</div><div class="ms">${G.slice(0,6).map((g,i)=>`<figure class="rv" data-lb="${i}">${IM(g[0],g[2])}<figcaption>${g[1]}</figcaption></figure>`).join("")}</div></section>
 <section class="w dk"><p class="eb">The team</p><h2 class="mk">Seven students, five faculties.</h2><p>${M.map(m=>m[0]).join(", ")}.</p><p>${L("team","Meet the team","btn")}</p></section>
-<section class="w"><p class="eb" style="text-align:center">Universitas Brawijaya, five faculties</p>${part()}</section>
+<section class="w fac-section"><div class="fac-intro"><p class="eb">Academic Collaboration</p><h2 class="mk" style="margin:0 auto">Universitas Brawijaya · Five Faculties</h2><p style="margin:12px auto 0;color:var(--mut);max-width:56ch">Kolaborasi lintas disiplin ilmu dari lima fakultas Universitas Brawijaya yang mewakili riset dan inovasi Indonesia di ajang internasional.</p></div>${part()}</section>
 <section class="w dd2" style="text-align:center;padding-block:clamp(90px,14vw,180px)"><h2 class="mk" style="margin:auto;max-width:14ch;color:var(--on)">Let’s grow a smarter future together.</h2><p style="margin:24px auto;color:#c9dcc0">For partners, farmers, researchers and curious minds.</p>${L("contact","Start a conversation","btn")} ${L("technology","Read the technology","btn o")}</section>`,
 technology:()=>`<div class="w pg">${BC([0,"Technology"])}<p class="eb">Technology</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">One system, end to end.</h1><p>Select a stage, then open its page for the details.</p>${DGM()}<div class="gr">${tcards()}</div></div>`,
-achievement:()=>`<section class="w dk pg"><p class="eb">Achievement</p><p class="aw">Gold Award</p><h2>World Young Inventors Exhibition 2026</h2><div class="sp" style="margin-top:56px">${IM("team","The team with the WYIE Gold Award certificate and medal")}<div><h3>The story</h3><p>A multidisciplinary Universitas Brawijaya team entered AQUASENSE at WYIE 2026, part of ITEX, in Kuala Lumpur in May 2026. Its official title: “Dual-Brain Edge AI for Fully Autonomous and Offline Aquaponics Monitoring.”</p><p>UB reports place the medal in the Agriculture category. In the final the team demonstrated AQUASENSE live and pitched to international judges and industry investors. Reports differ on the scale: FILKOM UB cites 600+ teams from 10 countries and territories, FTAB UB cites 1,000+ entries from 17 countries.</p></div></div></section>
-<section class="w"><p class="eb">Interactive 3D Hanging Medal</p><h2 class="mk">Gold Medal · WYIE 2026</h2><p class="rv">Medali emas asli dengan tali lanyard kain tenun. Sentuh dan tarik medali untuk merasakan fisika ayunan pendulum, gravitasi, dan inersia putaran 3D secara nyata.</p>${lanyardMedalHTML()}</section>
+achievement:()=>`<section class="w dk pg medal-exhibition-hero"><div class="medal-hero-intro"><p class="eb">Achievement · World Stage</p><p class="aw">Gold Award</p><h1 class="mk" style="font-size:clamp(1.8rem,4.5vw,3.2rem);margin:8px 0 16px">World Young Inventors Exhibition 2026</h1><p style="color:#d4e5d0;font-size:1.15rem;max-width:58ch">Kuala Lumpur Convention Centre (KLCC) · Malaysia · 17–20 Mei 2026</p></div>${lanyardMedalHTML()}<div class="sp" style="margin-top:64px;border-top:1px solid rgba(255,255,255,0.12);padding-top:48px"><div>${IM("team","The team with the WYIE Gold Award certificate and medal")}</div><div><h3 style="font-size:1.8rem;margin-bottom:16px">The story</h3><p>A multidisciplinary Universitas Brawijaya team entered AQUASENSE at WYIE 2026, part of ITEX, in Kuala Lumpur in May 2026. Its official title: “Dual-Brain Edge AI for Fully Autonomous and Offline Aquaponics Monitoring.”</p><p>UB reports place the medal in the Agriculture category. In the final the team demonstrated AQUASENSE live and pitched to international judges and industry investors. Reports differ on the scale: FILKOM UB cites 600+ teams from 10 countries and territories, FTAB UB cites 1,000+ entries from 17 countries.</p></div></div></section>
 <section class="w dk"><p class="eb">Award ceremony</p><h2 class="mk">The moment it was announced.</h2><div class="pg3">${[["stage","The WYIE 2026 awards stage"],["ceremony","With the UB flag at the ITEX 2026 awards presentation"],["cert","Holding the Gold Award certificate"]].map(x=>`<figure data-lb="${G.findIndex(g=>g[0]==x[0])}">${IM(x[0],x[1])}</figure>`).join("")}</div></section>
 <section class="w"><h2 class="mk">Seen on the day.</h2><div class="pg3">${[["proto","The prototype demonstration"],["display","Presenting the rig and the Gold Award at the booth"],["booth","The team at the AQUASENSE booth"]].map(x=>`<figure data-lb="${G.findIndex(g=>g[0]==x[0])}">${IM(x[0],x[1])}</figure>`).join("")}</div><p style="margin-top:28px">${L("gallery","View the full gallery","btn o")}</p></section>
 <section class="w dk"><h2 class="mk">Latest coverage.</h2><div class="pr">${PR.slice(0,3).map(p=>`<a class="rv" href="${p[5]}" target="_blank" rel="noopener"><span>${p[1]} · ${p[0]}</span><b>${p[3]}</b><span>Read ↗</span></a>`).join("")}</div><p style="margin-top:28px">${L("press","See all coverage","btn")}</p></section>
@@ -84,7 +99,7 @@ press:()=>`<section class="w pg"><article class="np"><div class="stamp">GOLD · 
 <div class="fb"><b>About WYIE.</b> Part of ITEX, organised by the Malaysian Invention and Design Society with the Indonesian Invention and Innovation Promotion Association, at KLCC in Kuala Lumpur. Dates vary by source: 17–20 or 17–21 May, and 18–20 May per FILKOM UB.</div>
 <div class="fl2">${["All","UB official","Media"].map((c,j)=>`<button class="${j?"":"on"}" data-pf="${c}">${c}</button>`).join("")}</div>
 <div class="cl">${PR.map(p=>`<details data-pt="${p[2]}"><summary>${p[3]}<small>${p[1]} · ${p[0]}</small></summary><p>${p[4]}</p><a href="${p[5]}" target="_blank" rel="noopener">Read the full story ↗</a></details>`).join("")}</div></article></section>`,
-team:()=>`<section class="w pg"><p class="eb">Team</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">The Brawijaya Team.</h1><p>Seven students from five faculties of Universitas Brawijaya, working together since late 2025.</p><div class="tm">${M.map(m=>`<div class="card rv"><div class="av">${m[0].split(" ").map(w=>w[0]).slice(0,2).join("")}</div><span class="rl">${m[3]}</span><h3 style="margin-top:10px">${m[0]}</h3><p>${m[1]}<br>${m[2]}</p></div>`).join("")}</div>${IM("team","The Brawijaya Team with the WYIE 2026 Gold Award","wide")}${part()}</section>`,
+team:()=>`<section class="w pg"><p class="eb">Team</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">The Brawijaya Team.</h1><p>Seven students from five faculties of Universitas Brawijaya, working together since late 2025.</p><div class="tm">${M.map(m=>`<div class="card rv"><div class="av">${m[0].split(" ").map(w=>w[0]).slice(0,2).join("")}</div><span class="rl">${m[3]}</span><h3 style="margin-top:10px">${m[0]}</h3><p>${m[1]}<br>${m[2]}</p></div>`).join("")}</div>${IM("team","The Brawijaya Team with the WYIE 2026 Gold Award","wide")}<div style="text-align:center;margin:64px auto 28px"><p class="eb">Supported by Faculties</p><h2 class="mk" style="margin:0 auto">Five Faculties, One Mission</h2></div>${part()}</section>`,
 contact:()=>`<section class="w dk pg" style="min-height:70vh"><p class="eb">Contact</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">Let’s collaborate.</h1><p>Partners, farmers, researchers and judges are welcome.</p>${contactLinks()}${EMAIL?`<form id="fm"><input name="n" placeholder="Your name" required aria-label="Your name"><input name="e" type="email" placeholder="Your email" required aria-label="Your email"><textarea name="m" rows="4" placeholder="Message" required aria-label="Message"></textarea><button class="btn">Send message</button></form>`:""}</section>`
 };
 function tp(k){const t=T[k],ks=TL.map(x=>x[0]),i=ks.indexOf(k),pv=TL[i-1],nx=TL[i+1];return`<div class="w pg">${BC(["technology","Technology"],[0,t.n])}<p class="eb">Technology</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">${t.n}</h1><p style="font-size:1.2rem">${t.i}</p>${k=="technology-hardware"?view3d():k=="technology-edge-ai"?IM("dash","The AQUASENSE dashboard"):""}<h3 style="margin-top:44px">Workflow</h3><div class="flw rv">${t.f.map(x=>`<span>${x}</span>`).join("<i>→</i>")}</div><h3>Components</h3>${t.p.map((x,j)=>`<details class="ex rv" ${j?"":"open"}><summary>${x[0]}</summary><p>${x[1]}</p></details>`).join("")}<div class="cp">${t.s.map(x=>`<span>${x}</span>`).join("")}</div><div class="pn">${pv?L(pv[0],"← "+pv[1],"btn o"):"<i></i>"}${nx?L(nx[0],nx[1]+" →","btn"):""}</div></div>`}
@@ -99,7 +114,22 @@ new THREE.GLTFLoader().load(GLB_URL,g=>{const m=g.scene,bx=new THREE.Box3().setF
 const oc=new THREE.OrbitControls(cam,cv);oc.enableDamping=true;oc.autoRotate=!rm;oc.autoRotateSpeed=1.2;oc.minDistance=2;oc.maxDistance=9;cam.position.set(2.6,1.7,3.2);let vis=1;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(box);
 const rs=()=>{const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};rs();new ResizeObserver(rs).observe(box);
 (function f(){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
-const part=()=>`<div class="lgs">${[["ub","Universitas Brawijaya"],["filkom","FILKOM UB"],["ft","FT UB"],["ftab","FTAB UB"],["fib","FIB UB"],["fisip","FISIP UB"],["wyie","WYIE · ITEX"]].map(p=>`<span>${LOGOS[p[0]]?`<img src="${LOGOS[p[0]]}" alt="">`:""}${p[1]}</span>`).join("")}</div>`;
+const part = () => `
+<div class="fac-showcase">
+  <div class="fac-grid">
+    ${FACULTIES_DATA.map(f => `
+      <a class="fac-card rv" href="${f.link}" target="_blank" rel="noopener">
+        <div class="fac-logo-wrap">
+          <img src="${f.logo}" alt="${f.name}" loading="lazy">
+        </div>
+        <div class="fac-meta">
+          <b class="fac-name">${f.name}</b>
+          <span class="fac-desc">${f.desc}</span>
+        </div>
+      </a>
+    `).join("")}
+  </div>
+</div>`;
 
 /* 3D Gold Medal Component */
 const medal3d=()=>`
@@ -241,14 +271,15 @@ function initMedal3d(){
    React Bits Style 3D Hanging Lanyard Gold Medal
    ============================================================ */
 const lanyardMedalHTML=()=>`
-<div class="lanyard-stage-wrap rv">
-  <div class="lanyard-container" id="lanyardStage">
-    <div class="lanyard-tip">✦ Tarik & ayunkan medali dengan kursor / sentuhan · Klik tombol untuk membalik sisi ✦</div>
-  </div>
-  <div class="lanyard-controls">
-    <button type="button" id="lanyardFlipBtn">⟲ Balik Sisi Medali (180°)</button>
-    <button type="button" id="lanyardSwingBtn">〰 Ayunkan Medali</button>
-    <button type="button" id="lanyardResetBtn">↺ Posisi Awal</button>
+<div class="lanyard-stage-wrap">
+  <div class="lanyard-container" id="lanyardStage"></div>
+  <div class="lanyard-glass-bar">
+    <div class="lanyard-tip">✦ Sentuh & tarik medali untuk mengayunkan · Klik tombol untuk membalik ke sisi WYIE / MINDS ✦</div>
+    <div class="lanyard-controls">
+      <button type="button" id="lanyardFlipBtn">⟲ Balik Sisi Medali (180°)</button>
+      <button type="button" id="lanyardSwingBtn">〰 Ayunkan Medali</button>
+      <button type="button" id="lanyardResetBtn">↺ Posisi Awal</button>
+    </div>
   </div>
 </div>`;
 
@@ -323,7 +354,7 @@ function initLanyardMedal(){
     const height = container.clientHeight || 500;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 0.2, 7.2);
+    camera.position.set(0, 0.1, 7.0);
     
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
@@ -333,11 +364,6 @@ function initLanyardMedal(){
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
-    
-    const tip = document.createElement("div");
-    tip.className = "lanyard-tip";
-    tip.textContent = "✦ Tarik & ayunkan medali dengan kursor / sentuhan · Klik tombol untuk membalik sisi ✦";
-    container.appendChild(tip);
     
     const ambient = new THREE.AmbientLight(0xfff5e6, 1.25);
     scene.add(ambient);
@@ -445,9 +471,9 @@ function initLanyardMedal(){
     medalGroup.add(clampGroup);
     scene.add(medalGroup);
     
-    const numSegments = 18;
-    const restLength = 0.18;
-    const anchor = new THREE.Vector3(0, 3.2, 0);
+    const numSegments = 20;
+    const restLength = 0.17;
+    const anchor = new THREE.Vector3(0, 3.6, 0);
     const points = [];
     const oldPoints = [];
     
