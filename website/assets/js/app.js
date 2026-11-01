@@ -117,7 +117,7 @@ function nav(first){const r=name(),p=$("#pt");if(r===cur&&!first)return;cur=r;bu
 addEventListener("hashchange",()=>nav());
 function init(r){$$("[data-logo]").forEach(e=>e.src=IMG.logo.f);boot3();
  $$(".mk").forEach(e=>{e.innerHTML=e.textContent.split(" ").map(w=>`<span><b>${w}</b></span> `).join("");e.querySelectorAll("b").forEach((b,i)=>b.style.transitionDelay=i*60+"ms")});
- const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:.12});$$(".rv,.mk,.np").forEach(e=>io.observe(e));
+ const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:0.01,rootMargin:"250px 0px"});$$(".rv,.mk,.np").forEach(e=>io.observe(e));setTimeout(()=>{$$(".rv:not(.in),.mk:not(.in),.np:not(.in)").forEach(e=>e.classList.add("in"))},2000);
  
  const cv=$("#cv");if(cv&&!rm){const x=cv.getContext("2d"),h=$(".hero");let R=[];const sz=()=>{cv.width=cv.offsetWidth;cv.height=cv.offsetHeight};sz();addEventListener("resize",sz);const dr=(a,b)=>R.push({x:a,y:b,r:2,a:.5});
   h.addEventListener("pointermove",e=>{const b=cv.getBoundingClientRect();if(Math.random()<.2)dr(e.clientX-b.left,e.clientY-b.top);$$(".fl").forEach(f=>f.style.transform=`translate(${(e.clientX/innerWidth-.5)*f.dataset.d}px,${(e.clientY/innerHeight-.5)*f.dataset.d}px)`)});
