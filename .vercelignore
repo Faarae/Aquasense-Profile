@@ -1,0 +1,8 @@
+# Vercel deployment ignore
+arsip/
+*.html
+*.ps1
+*.zip
+node_modules/
+.git/
+

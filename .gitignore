@@ -1,0 +1,9 @@
+# Private & sensitive documents (receipts, bookings, IDs)
+arsip/pribadi/
+
+# Deployments & local dev
+.vercel
+node_modules/
+*.zip
+*.ps1
+
