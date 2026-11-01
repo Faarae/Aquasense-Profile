@@ -1,8 +1,6 @@
 # Vercel deployment ignore
+# Hanya folder arsip dan file non-web lokal yang diabaikan
 arsip/
-*.html
 *.ps1
 *.zip
-node_modules/
 .git/
-
