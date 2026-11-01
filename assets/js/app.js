@@ -73,7 +73,7 @@ home:()=>`<section class="hero"><canvas id="cv"></canvas>
 <section class="w dd2" style="text-align:center;padding-block:clamp(90px,14vw,180px)"><h2 class="mk" style="margin:auto;max-width:14ch;color:var(--on)">Let’s grow a smarter future together.</h2><p style="margin:24px auto;color:#c9dcc0">For partners, farmers, researchers and curious minds.</p>${L("contact","Start a conversation","btn")} ${L("technology","Read the technology","btn o")}</section>`,
 technology:()=>`<div class="w pg">${BC([0,"Technology"])}<p class="eb">Technology</p><h1 class="mk" style="font-size:clamp(2.6rem,8vw,6rem)">One system, end to end.</h1><p>Select a stage, then open its page for the details.</p>${DGM()}<div class="gr">${tcards()}</div></div>`,
 achievement:()=>`<section class="w dk pg"><p class="eb">Achievement</p><p class="aw">Gold Award</p><h2>World Young Inventors Exhibition 2026</h2><div class="sp" style="margin-top:56px">${IM("team","The team with the WYIE Gold Award certificate and medal")}<div><h3>The story</h3><p>A multidisciplinary Universitas Brawijaya team entered AQUASENSE at WYIE 2026, part of ITEX, in Kuala Lumpur in May 2026. Its official title: “Dual-Brain Edge AI for Fully Autonomous and Offline Aquaponics Monitoring.”</p><p>UB reports place the medal in the Agriculture category. In the final the team demonstrated AQUASENSE live and pitched to international judges and industry investors. Reports differ on the scale: FILKOM UB cites 600+ teams from 10 countries and territories, FTAB UB cites 1,000+ entries from 17 countries.</p></div></div></section>
-<section class="w"><div class="sp r"><div class="rv">${medal3d()}</div><div><p class="eb">Interactive 3D Medal</p><h2 class="mk">Gold, Agriculture category.</h2><p class="rv">Awarded at the ITEX · WYIE 2026 awards presentation at KLCC, Kuala Lumpur, alongside a Gold Award certificate for AQUASENSE.</p><p class="rv">Eksplorasi medali 3D: putar 360° secara interaktif untuk melihat sisi depan (WYIE 2026) dan sisi belakang (emblem MINDS), lengkap dengan tali pita pameran resmi.</p></div></div></section>
+<section class="w"><p class="eb">Interactive 3D Hanging Medal</p><h2 class="mk">Gold Medal · WYIE 2026</h2><p class="rv">Medali emas asli dengan tali lanyard kain tenun. Sentuh dan tarik medali untuk merasakan fisika ayunan pendulum, gravitasi, dan inersia putaran 3D secara nyata.</p>${lanyardMedalHTML()}</section>
 <section class="w dk"><p class="eb">Award ceremony</p><h2 class="mk">The moment it was announced.</h2><div class="pg3">${[["stage","The WYIE 2026 awards stage"],["ceremony","With the UB flag at the ITEX 2026 awards presentation"],["cert","Holding the Gold Award certificate"]].map(x=>`<figure data-lb="${G.findIndex(g=>g[0]==x[0])}">${IM(x[0],x[1])}</figure>`).join("")}</div></section>
 <section class="w"><h2 class="mk">Seen on the day.</h2><div class="pg3">${[["proto","The prototype demonstration"],["display","Presenting the rig and the Gold Award at the booth"],["booth","The team at the AQUASENSE booth"]].map(x=>`<figure data-lb="${G.findIndex(g=>g[0]==x[0])}">${IM(x[0],x[1])}</figure>`).join("")}</div><p style="margin-top:28px">${L("gallery","View the full gallery","btn o")}</p></section>
 <section class="w dk"><h2 class="mk">Latest coverage.</h2><div class="pr">${PR.slice(0,3).map(p=>`<a class="rv" href="${p[5]}" target="_blank" rel="noopener"><span>${p[1]} · ${p[0]}</span><b>${p[3]}</b><span>Read ↗</span></a>`).join("")}</div><p style="margin-top:28px">${L("press","See all coverage","btn")}</p></section>
@@ -237,6 +237,429 @@ function initMedal3d(){
   };
 }
 
+/* ============================================================
+   React Bits Style 3D Hanging Lanyard Gold Medal
+   ============================================================ */
+const lanyardMedalHTML=()=>`
+<div class="lanyard-stage-wrap rv">
+  <div class="lanyard-container" id="lanyardStage">
+    <div class="lanyard-tip">✦ Tarik & ayunkan medali dengan kursor / sentuhan · Klik tombol untuk membalik sisi ✦</div>
+  </div>
+  <div class="lanyard-controls">
+    <button type="button" id="lanyardFlipBtn">⟲ Balik Sisi Medali (180°)</button>
+    <button type="button" id="lanyardSwingBtn">〰 Ayunkan Medali</button>
+    <button type="button" id="lanyardResetBtn">↺ Posisi Awal</button>
+  </div>
+</div>`;
+
+function createStrapCanvasTex() {
+  const c = document.createElement("canvas");
+  c.width = 512;
+  c.height = 2048;
+  const ctx = c.getContext("2d");
+  
+  ctx.fillStyle = "#0a1128";
+  ctx.fillRect(0, 0, 512, 2048);
+  
+  ctx.fillStyle = "rgba(255,255,255,0.025)";
+  for (let y = 0; y < 2048; y += 4) ctx.fillRect(0, y, 512, 2);
+  for (let x = 0; x < 512; x += 4) ctx.fillRect(x, 0, 2, 2048);
+  
+  const goldGrad = ctx.createLinearGradient(0, 0, 512, 0);
+  goldGrad.addColorStop(0, "#8c6d1f");
+  goldGrad.addColorStop(0.04, "#ffd700");
+  goldGrad.addColorStop(0.08, "#c59b27");
+  goldGrad.addColorStop(0.09, "#0a1128");
+  goldGrad.addColorStop(0.91, "#0a1128");
+  goldGrad.addColorStop(0.92, "#c59b27");
+  goldGrad.addColorStop(0.96, "#ffd700");
+  goldGrad.addColorStop(1, "#8c6d1f");
+  ctx.fillStyle = goldGrad;
+  ctx.fillRect(0, 0, 512, 2048);
+  
+  ctx.strokeStyle = "#ffd700";
+  ctx.lineWidth = 3;
+  ctx.setLineDash([12, 8]);
+  ctx.beginPath();
+  ctx.moveTo(35, 0); ctx.lineTo(35, 2048);
+  ctx.moveTo(477, 0); ctx.lineTo(477, 2048);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  
+  ctx.save();
+  ctx.translate(256, 1024);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  
+  const repeatText = "✦  WYIE 2026  ✦  WORLD YOUNG INVENTORS EXHIBITION  ✦  MALAYSIA  ✦  ";
+  ctx.font = 'bold 36px "Instrument Sans", Arial, sans-serif';
+  
+  for (let offset = -2000; offset <= 2000; offset += 900) {
+    const tg = ctx.createLinearGradient(offset - 200, 0, offset + 200, 0);
+    tg.addColorStop(0, "#ffd700");
+    tg.addColorStop(0.5, "#fff6b0");
+    tg.addColorStop(1, "#d4af37");
+    ctx.fillStyle = tg;
+    ctx.shadowColor = "rgba(0,0,0,0.85)";
+    ctx.shadowBlur = 6;
+    ctx.fillText(repeatText, offset, 0);
+  }
+  ctx.restore();
+  
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+
+function initLanyardMedal(){
+  const container = $("#lanyardStage");
+  if(!container) return;
+  load3().then(() => {
+    if(!container.isConnected) return;
+    
+    const width = container.clientWidth || 600;
+    const height = container.clientHeight || 500;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+    camera.position.set(0, 0.2, 7.2);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.innerHTML = "";
+    container.appendChild(renderer.domElement);
+    
+    const tip = document.createElement("div");
+    tip.className = "lanyard-tip";
+    tip.textContent = "✦ Tarik & ayunkan medali dengan kursor / sentuhan · Klik tombol untuk membalik sisi ✦";
+    container.appendChild(tip);
+    
+    const ambient = new THREE.AmbientLight(0xfff5e6, 1.25);
+    scene.add(ambient);
+    
+    const keyLight = new THREE.DirectionalLight(0xfff8e8, 2.2);
+    keyLight.position.set(4, 8, 6);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
+    
+    const rimLight = new THREE.DirectionalLight(0xd4eaff, 1.6);
+    rimLight.position.set(-6, -2, -5);
+    scene.add(rimLight);
+    
+    const fillLight = new THREE.DirectionalLight(0xffd700, 0.9);
+    fillLight.position.set(0, -6, 4);
+    scene.add(fillLight);
+    
+    const texLoader = new THREE.TextureLoader();
+    const frontTex = texLoader.load("assets/img/medal-back.png");
+    const backTex = texLoader.load("assets/img/medal-front.png");
+    frontTex.encoding = THREE.sRGBEncoding;
+    backTex.encoding = THREE.sRGBEncoding;
+    const strapTex = createStrapCanvasTex();
+    
+    const goldMat = new THREE.MeshStandardMaterial({
+      color: 0xdfb738,
+      metalness: 0.96,
+      roughness: 0.18,
+      envMapIntensity: 1.5
+    });
+    
+    const frontMat = new THREE.MeshStandardMaterial({
+      map: frontTex,
+      metalness: 0.85,
+      roughness: 0.25,
+      bumpScale: 0.05
+    });
+    
+    const backMat = new THREE.MeshStandardMaterial({
+      map: backTex,
+      metalness: 0.85,
+      roughness: 0.25,
+      bumpScale: 0.05
+    });
+    
+    const strapMat = new THREE.MeshStandardMaterial({
+      map: strapTex,
+      side: THREE.DoubleSide,
+      roughness: 0.85,
+      metalness: 0.08
+    });
+    
+    const medalGroup = new THREE.Group();
+    const medalRadius = 1.35;
+    const medalThickness = 0.14;
+    
+    const frontGeo = new THREE.CircleGeometry(medalRadius, 64);
+    const frontMesh = new THREE.Mesh(frontGeo, frontMat);
+    frontMesh.position.z = medalThickness / 2 + 0.002;
+    medalGroup.add(frontMesh);
+    
+    const backGeo = new THREE.CircleGeometry(medalRadius, 64);
+    const backMesh = new THREE.Mesh(backGeo, backMat);
+    backMesh.rotation.y = Math.PI;
+    backMesh.position.z = -medalThickness / 2 - 0.002;
+    medalGroup.add(backMesh);
+    
+    const rimGeo = new THREE.CylinderGeometry(medalRadius, medalRadius, medalThickness, 64, 1, true);
+    const rimMesh = new THREE.Mesh(rimGeo, goldMat);
+    rimMesh.rotation.x = Math.PI / 2;
+    medalGroup.add(rimMesh);
+    
+    const ringGeo = new THREE.TorusGeometry(medalRadius - 0.02, 0.038, 16, 64);
+    const ringFront = new THREE.Mesh(ringGeo, goldMat);
+    ringFront.position.z = medalThickness / 2;
+    medalGroup.add(ringFront);
+    
+    const ringBack = new THREE.Mesh(ringGeo, goldMat);
+    ringBack.position.z = -medalThickness / 2;
+    medalGroup.add(ringBack);
+    
+    const eyeletGeo = new THREE.TorusGeometry(0.16, 0.036, 16, 32);
+    const eyelet = new THREE.Mesh(eyeletGeo, goldMat);
+    eyelet.position.y = medalRadius + 0.12;
+    medalGroup.add(eyelet);
+    
+    const clampGroup = new THREE.Group();
+    clampGroup.position.y = medalRadius + 0.38;
+    
+    const bracketGeo = new THREE.BoxGeometry(0.55, 0.18, 0.12);
+    const bracket = new THREE.Mesh(bracketGeo, goldMat);
+    clampGroup.add(bracket);
+    
+    const swivelCyl = new THREE.CylinderGeometry(0.06, 0.06, 0.2, 16);
+    const swivel = new THREE.Mesh(swivelCyl, goldMat);
+    swivel.position.y = -0.12;
+    clampGroup.add(swivel);
+    
+    const hookRingGeo = new THREE.TorusGeometry(0.14, 0.032, 16, 32);
+    const hookRing = new THREE.Mesh(hookRingGeo, goldMat);
+    hookRing.rotation.y = Math.PI / 2;
+    hookRing.position.y = -0.22;
+    clampGroup.add(hookRing);
+    
+    medalGroup.add(clampGroup);
+    scene.add(medalGroup);
+    
+    const numSegments = 18;
+    const restLength = 0.18;
+    const anchor = new THREE.Vector3(0, 3.2, 0);
+    const points = [];
+    const oldPoints = [];
+    
+    for (let i = 0; i <= numSegments; i++) {
+      const p = new THREE.Vector3(0, anchor.y - i * restLength, 0);
+      points.push(p);
+      oldPoints.push(p.clone());
+    }
+    
+    const strapWidth = 0.44;
+    const strapGeo = new THREE.PlaneGeometry(strapWidth, 1, 1, numSegments);
+    const strapMesh = new THREE.Mesh(strapGeo, strapMat);
+    strapMesh.castShadow = true;
+    scene.add(strapMesh);
+    
+    function updateRibbonMesh() {
+      const posAttr = strapGeo.attributes.position;
+      for (let i = 0; i <= numSegments; i++) {
+        const curr = points[i];
+        let tangent = new THREE.Vector3(0, -1, 0);
+        if (i < numSegments) tangent.subVectors(points[i + 1], curr).normalize();
+        else tangent.subVectors(curr, points[i - 1]).normalize();
+        
+        const side = new THREE.Vector3().crossVectors(tangent, new THREE.Vector3(0, 0, 1)).normalize();
+        if (side.lengthSq() < 0.001) side.set(1, 0, 0);
+        
+        const widthFactor = (i === numSegments) ? 0.8 : (i === 0 ? 0.9 : 1.0);
+        const halfW = (strapWidth * widthFactor) / 2;
+        
+        const vIdx = i * 2;
+        posAttr.setXYZ(vIdx, curr.x - side.x * halfW, curr.y - side.y * halfW, curr.z + 0.01);
+        posAttr.setXYZ(vIdx + 1, curr.x + side.x * halfW, curr.y + side.y * halfW, curr.z + 0.01);
+      }
+      posAttr.needsUpdate = true;
+      strapGeo.computeVertexNormals();
+    }
+    
+    function physicsStep(dt) {
+      const gravity = new THREE.Vector3(0, -22.0, 0);
+      const damping = 0.975;
+      
+      for (let i = 1; i <= numSegments; i++) {
+        if (i === numSegments && isDragging) continue;
+        const p = points[i];
+        const op = oldPoints[i];
+        
+        const vx = (p.x - op.x) * damping;
+        const vy = (p.y - op.y) * damping;
+        const vz = (p.z - op.z) * damping;
+        
+        op.copy(p);
+        p.x += vx + gravity.x * dt * dt;
+        p.y += vy + gravity.y * dt * dt;
+        p.z += vz + gravity.z * dt * dt;
+      }
+      
+      for (let iter = 0; iter < 12; iter++) {
+        points[0].copy(anchor);
+        for (let i = 0; i < numSegments; i++) {
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const delta = new THREE.Vector3().subVectors(p2, p1);
+          const dist = delta.length();
+          if (dist < 0.0001) continue;
+          const diff = (dist - restLength) / dist;
+          
+          if (i === 0) {
+            p2.sub(delta.multiplyScalar(diff));
+          } else if (i === numSegments - 1 && isDragging) {
+            p1.add(delta.multiplyScalar(diff));
+          } else {
+            delta.multiplyScalar(diff * 0.5);
+            p1.add(delta);
+            p2.sub(delta);
+          }
+        }
+      }
+    }
+    
+    let isDragging = false;
+    let dragOffset = new THREE.Vector3();
+    let rotY = 0;
+    let rotVelY = 0;
+    let targetFlipY = 0;
+    let isFlipping = false;
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    
+    let lastTime = performance.now();
+    function animate(now) {
+      if(!container.isConnected) return;
+      requestAnimationFrame(animate);
+      const dt = Math.min((now - lastTime) / 1000, 0.033);
+      lastTime = now;
+      
+      physicsStep(dt);
+      updateRibbonMesh();
+      
+      const medalPos = points[numSegments];
+      const prevPos = points[numSegments - 1];
+      const strapDir = new THREE.Vector3().subVectors(medalPos, prevPos).normalize();
+      
+      medalGroup.position.copy(medalPos);
+      
+      const tiltZ = -strapDir.x * 0.85;
+      const tiltX = strapDir.z * 0.85;
+      
+      if (isFlipping) {
+        rotY += (targetFlipY - rotY) * 0.12;
+        if (Math.abs(targetFlipY - rotY) < 0.01) {
+          rotY = targetFlipY;
+          isFlipping = false;
+        }
+      } else {
+        const idleSway = Math.sin(now * 0.0018) * 0.08;
+        rotVelY *= 0.96;
+        rotY += rotVelY * dt + idleSway * dt;
+      }
+      
+      medalGroup.rotation.set(tiltX, rotY, tiltZ);
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(animate);
+    
+    let prevMouseX = 0;
+    const getEvtCoords = (e) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const clientX = e.clientX ?? (e.touches && e.touches[0].clientX) ?? 0;
+      const clientY = e.clientY ?? (e.touches && e.touches[0].clientY) ?? 0;
+      return {
+        x: ((clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((clientY - rect.top) / rect.height) * 2 + 1,
+        clientX
+      };
+    };
+    
+    const onDown = (e) => {
+      const { x, y, clientX } = getEvtCoords(e);
+      mouse.set(x, y);
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects([frontMesh, backMesh, rimMesh, bracket], true);
+      if (hits.length > 0) {
+        isDragging = true;
+        prevMouseX = clientX;
+        const pt = new THREE.Vector3();
+        raycaster.ray.intersectPlane(dragPlane, pt);
+        dragOffset.subVectors(points[numSegments], pt);
+      }
+    };
+    
+    const onMove = (e) => {
+      if (!isDragging) return;
+      const { x, y, clientX } = getEvtCoords(e);
+      mouse.set(x, y);
+      raycaster.setFromCamera(mouse, camera);
+      const pt = new THREE.Vector3();
+      raycaster.ray.intersectPlane(dragPlane, pt);
+      pt.add(dragOffset);
+      pt.z = Math.max(-1.6, Math.min(1.6, pt.z));
+      points[numSegments].copy(pt);
+      
+      const dx = clientX - prevMouseX;
+      prevMouseX = clientX;
+      rotVelY += dx * 0.15;
+    };
+    
+    const onUp = () => { isDragging = false; };
+    
+    container.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    
+    const flipBtn = $("#lanyardFlipBtn");
+    const swingBtn = $("#lanyardSwingBtn");
+    const resetBtn = $("#lanyardResetBtn");
+    
+    if (flipBtn) flipBtn.onclick = () => {
+      isFlipping = true;
+      targetFlipY = (Math.round(rotY / Math.PI) + 1) * Math.PI;
+    };
+    
+    if (swingBtn) swingBtn.onclick = () => {
+      points[numSegments].x += (Math.random() - 0.5) * 1.8;
+      points[numSegments].z += (Math.random() - 0.5) * 1.2;
+      rotVelY += (Math.random() - 0.5) * 8.0;
+    };
+    
+    if (resetBtn) resetBtn.onclick = () => {
+      for (let i = 0; i <= numSegments; i++) {
+        points[i].set(0, anchor.y - i * restLength, 0);
+        oldPoints[i].copy(points[i]);
+      }
+      rotY = 0;
+      rotVelY = 0;
+      isFlipping = false;
+    };
+    
+    const onResize = () => {
+      if (!container.isConnected) return;
+      const w = container.clientWidth || 600;
+      const h = container.clientHeight || 500;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    };
+    window.addEventListener("resize", onResize);
+    new ResizeObserver(onResize).observe(container);
+  }).catch(() => {});
+}
+
 
 // chrome
 const NL=()=>NV.map(n=>n[0]=="technology"?`<div><a href="#technology" data-r="technology">Technology ▾</a><div class="dm">${TL.map(t=>L(t[0],t[1])).join("")}</div></div>`:`<a href="#${n[0]}" data-r="${n[0]}">${n[1]}</a>`).join("");
@@ -251,7 +674,7 @@ function render(r){$("#app").innerHTML=P[r]();scrollTo(0,0);document.title=(r=="
 $$("[data-r]").forEach(a=>a.classList.toggle("on",r==a.dataset.r||(a.dataset.r=="technology"&&r.startsWith("technology"))));tm(0);init(r)}
 function nav(first){const r=name(),p=$("#pt");if(r===cur&&!first)return;cur=r;busy=1;p.classList.remove("up");p.classList.add("on");setTimeout(()=>{render(r);p.classList.add("up");p.classList.remove("on");setTimeout(()=>{p.classList.remove("up");p.style.transition="none";p.offsetWidth;p.style.transition="";busy=0},520)},rm?0:first?500:420)}
 addEventListener("hashchange",()=>nav());
-function init(r){$$("[data-logo]").forEach(e=>e.src=IMG.logo.f);boot3();initMedal3d();
+function init(r){$$("[data-logo]").forEach(e=>e.src=IMG.logo.f);boot3();initMedal3d();initLanyardMedal();
  $$(".mk").forEach(e=>{e.innerHTML=e.textContent.split(" ").map(w=>`<span><b>${w}</b></span> `).join("");e.querySelectorAll("b").forEach((b,i)=>b.style.transitionDelay=i*60+"ms")});
  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:0.01,rootMargin:"250px 0px"});$$(".rv,.mk,.np").forEach(e=>io.observe(e));setTimeout(()=>{$$(".rv:not(.in),.mk:not(.in),.np:not(.in)").forEach(e=>e.classList.add("in"))},2000);
  
