@@ -12,12 +12,12 @@ const LOGOS = {
 };
 
 const FACULTIES_DATA = [
-  { id: "ub", name: "Universitas Brawijaya", desc: "Perguruan Tinggi Induk", logo: LOGOS.ub, link: "https://ub.ac.id" },
-  { id: "filkom", name: "FILKOM UB", desc: "Fakultas Ilmu Komputer", logo: LOGOS.filkom, link: "https://filkom.ub.ac.id" },
-  { id: "ft", name: "FT UB", desc: "Fakultas Teknik", logo: LOGOS.ft, link: "https://teknik.ub.ac.id" },
-  { id: "ftab", name: "FTAB UB", desc: "Fakultas Teknologi Agroindustri & Biosistem", logo: LOGOS.ftab, link: "https://ub.ac.id" },
-  { id: "fib", name: "FIB UB", desc: "Fakultas Ilmu Budaya", logo: LOGOS.fib, link: "https://fib.ub.ac.id" },
-  { id: "fisip", name: "FISIP UB", desc: "Fakultas Ilmu Sosial & Ilmu Politik", logo: LOGOS.fisip, link: "https://fisip.ub.ac.id" }
+  { id: "ub", name: "Universitas Brawijaya", desc: "Perguruan Tinggi Induk", logo: LOGOS.ub },
+  { id: "filkom", name: "FILKOM UB", desc: "Fakultas Ilmu Komputer", logo: LOGOS.filkom },
+  { id: "ft", name: "FT UB", desc: "Fakultas Teknik", logo: LOGOS.ft },
+  { id: "ftab", name: "FTAB UB", desc: "Fakultas Teknologi Agroindustri & Biosistem", logo: LOGOS.ftab },
+  { id: "fib", name: "FIB UB", desc: "Fakultas Ilmu Budaya", logo: LOGOS.fib },
+  { id: "fisip", name: "FISIP UB", desc: "Fakultas Ilmu Sosial & Ilmu Politik", logo: LOGOS.fisip }
 ];
 
 /* Contact details: fill in any of these and they appear on the Contact page.
@@ -76,7 +76,7 @@ home:()=>`<section class="hero"><canvas id="cv"></canvas>
 <div class="hg"><div><p class="eb">Brawijaya Team · Universitas Brawijaya</p><h1 aria-label="Aquasense"><span>AQUA</span><span><em>SENSE</em></span></h1><p class="tag">Dual-brain edge AI that watches fish, water and lettuce, with no internet needed.</p><p><a class="btn" href="#technology">Explore the technology</a> <a class="btn o" href="#achievement">Discover our achievement</a></p></div>
 <div class="fr"><div class="ir"><img src="${IMG.proto.f}" alt="The AQUASENSE prototype with its dashboard" fetchpriority="high"></div><div class="seal"><svg viewBox="0 0 128 128"><defs><path id="ci" d="M64 64m-52 0a52 52 0 1 1 104 0a52 52 0 1 1-104 0"/></defs><text><textPath href="#ci">GOLD MEDAL · WYIE 2026 · GOLD MEDAL · WYIE 2026 ·</textPath></text></svg><b>Gold<br>2026</b></div></div></div>
 <div class="wv" style="color:var(--bg)"><svg viewBox="0 0 2400 120" preserveAspectRatio="none" style="color:var(--water)"><use href="#wy" width="1200" height="120"/><use href="#wy" x="1200" width="1200" height="120"/></svg><svg viewBox="0 0 2400 120" preserveAspectRatio="none"><use href="#wy" width="1200" height="120"/><use href="#wy" x="1200" width="1200" height="120"/></svg></div></section>
-<div class="mq" aria-hidden="true"><div class="mq-inner"><span>Fish ✦ Lettuce ✦ Water ✦ Dual-Brain Edge AI ✦ Offline-First ✦ WYIE 2026 Gold Medal ✦ Universitas Brawijaya ✦ </span><span>Fish ✦ Lettuce ✦ Water ✦ Dual-Brain Edge AI ✦ Offline-First ✦ WYIE 2026 Gold Medal ✦ Universitas Brawijaya ✦ </span></div></div>
+<div class="mq-wrap"><div class="mq" aria-hidden="true"><div class="mq-inner"><span>Fish ✦ Lettuce ✦ Water ✦ Dual-Brain Edge AI ✦ Offline-First ✦ WYIE 2026 Gold Medal ✦ Universitas Brawijaya ✦ </span><span>Fish ✦ Lettuce ✦ Water ✦ Dual-Brain Edge AI ✦ Offline-First ✦ WYIE 2026 Gold Medal ✦ Universitas Brawijaya ✦ </span></div></div></div>
 <section class="w"><div class="sp"><div><p class="eb rv">What is AQUASENSE?</p><h2 class="mk">Aquaponics that looks after itself.</h2><p class="rv">Aquaponics grows fish and plants in one loop. It saves water, but the balance between fish, plants and water chemistry is hard to keep without expert knowledge.</p><p class="rv">AQUASENSE connects sensors and a camera to two local AI brains. They diagnose the plants and the water together, then explain what to do next. It runs offline, so a remote farm or a school rooftop works as well as a lab.</p></div>${IM("booth","The team at the AQUASENSE booth")}</div></section>
 <section class="w dk"><p class="eb">Problem and solution</p><h2 class="mk">Three gaps, three answers.</h2><p>Tap a card to see how AQUASENSE responds.</p><div class="gr">${[["Complexity","Keeping fish, plants and water in balance takes expert knowledge.","An AI agronomist that explains problems and next steps in plain language."],["Slow manual checks","Checking by hand is slow, error-prone and late.","Sensors and a camera watch continuously and flag issues early."],["Separate monitoring","Water and plants are usually monitored apart.","One system reads water data and plant images together."]].map(c=>`<button class="card fc rv" data-f><h3>${c[0]}</h3><p class="q">${c[1]}</p><p class="a"><b>AQUASENSE:</b> ${c[2]}</p></button>`).join("")}</div></section>
 <section class="w"><p class="eb">System overview</p><h2 class="mk">From water to decision.</h2><p>Select a stage to see what it does.</p>${DGM()}</section>
@@ -115,20 +115,23 @@ new THREE.GLTFLoader().load(GLB_URL,g=>{const m=g.scene,bx=new THREE.Box3().setF
 const oc=new THREE.OrbitControls(cam,cv);oc.enableDamping=true;oc.autoRotate=!rm;oc.autoRotateSpeed=1.2;oc.minDistance=2;oc.maxDistance=9;cam.position.set(2.6,1.7,3.2);let vis=1;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(box);
 const rs=()=>{const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};rs();new ResizeObserver(rs).observe(box);
 (function f(){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
+const renderFacPills = () => FACULTIES_DATA.map(f => `
+  <div class="fac-pill">
+    <div class="fac-pill-logo">
+      <img src="${f.logo}" alt="${f.name}" loading="lazy">
+    </div>
+    <div class="fac-pill-info">
+      <b>${f.name}</b>
+      <span>${f.desc}</span>
+    </div>
+  </div>
+`).join("");
+
 const part = () => `
-<div class="fac-showcase">
-  <div class="fac-grid">
-    ${FACULTIES_DATA.map(f => `
-      <a class="fac-card rv" href="${f.link}" target="_blank" rel="noopener">
-        <div class="fac-logo-wrap">
-          <img src="${f.logo}" alt="${f.name}" loading="lazy">
-        </div>
-        <div class="fac-meta">
-          <b class="fac-name">${f.name}</b>
-          <span class="fac-desc">${f.desc}</span>
-        </div>
-      </a>
-    `).join("")}
+<div class="fac-ticker-wrap" aria-label="Universitas Brawijaya Faculties">
+  <div class="fac-ticker-track">
+    <div class="fac-ticker-group">${renderFacPills()}</div>
+    <div class="fac-ticker-group" aria-hidden="true">${renderFacPills()}</div>
   </div>
 </div>`;
 
