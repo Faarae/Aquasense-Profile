@@ -110,11 +110,13 @@ const contactLinks=()=>`<div class="ctl"><a class="card" href="#fm"><small>Direc
 const LS=u=>new Promise((o,e)=>{const s=document.createElement("script");s.src=u;s.onload=o;s.onerror=e;document.head.appendChild(s)});let T3;
 const load3=()=>T3||(T3=LS("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js").then(()=>LS("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js")).then(()=>LS("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")));
 const view3d=()=>`<div class="v3 rv"><img class="po" src="${IMG.shot.f}" alt="3D design of the AQUASENSE rig"><canvas aria-label="Interactive 3D model of the AQUASENSE rig. Drag to rotate."></canvas><small>Drag to rotate · scroll to zoom</small></div>`;
-function boot3(){const box=$(".v3");if(!box)return;const cv=box.querySelector("canvas");load3().then(()=>{const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.outputEncoding=THREE.sRGBEncoding;const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,.01,1000);sc.add(new THREE.HemisphereLight(0xffffff,0x88aa88,1.1));const d=new THREE.DirectionalLight(0xffffff,1.3);d.position.set(3,6,4);sc.add(d);
-new THREE.GLTFLoader().load(GLB_URL,g=>{const m=g.scene,bx=new THREE.Box3().setFromObject(m),c=bx.getCenter(new THREE.Vector3()),s=bx.getSize(new THREE.Vector3());m.position.sub(c);const w=new THREE.Group();w.add(m);w.scale.setScalar(2.6/Math.max(s.x,s.y,s.z));sc.add(w);cam.position.set(2.6,1.7,3.2);box.classList.add("ok")},undefined,()=>{});
+function boot3(){const box=$(".v3");if(!box)return;const cv=box.querySelector("canvas");load3().then(()=>{const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.outputEncoding=THREE.sRGBEncoding;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=.72;const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,.01,1000),fishAnimations=[];sc.add(new THREE.HemisphereLight(0xc9dcff,0x34402f,.3));const d=new THREE.DirectionalLight(0xffe6c2,.65);d.position.set(3,6,4);sc.add(d);const rim=new THREE.DirectionalLight(0x86b9ff,.7);rim.position.set(-4,2,-3);sc.add(rim);
+new THREE.GLTFLoader().load(GLB_URL,g=>{const m=g.scene;
+[1,2,3].forEach(i=>{const parts=[];m.traverse(o=>{if(o.name.startsWith(`Fish ${i} `))parts.push(o)});if(!parts.length)return;const bounds=new THREE.Box3();parts.forEach(o=>bounds.expandByObject(o));const group=new THREE.Group();m.add(group);group.position.copy(bounds.getCenter(new THREE.Vector3()));parts.forEach(o=>group.attach(o));fishAnimations.push({object:group,position:group.position.clone(),rotation:group.rotation.clone(),phase:(i-1)*2.1})});
+const bx=new THREE.Box3().setFromObject(m),c=bx.getCenter(new THREE.Vector3()),s=bx.getSize(new THREE.Vector3());m.position.sub(c);const w=new THREE.Group();w.add(m);w.scale.setScalar(2.6/Math.max(s.x,s.y,s.z));const lamp=new THREE.SpotLight(0xffc45e,.7,4.5,Math.PI/4,.75,1.2);lamp.position.set(0,s.y*.48,0);lamp.target.position.set(0,-s.y*.18,0);w.add(lamp,lamp.target);sc.add(w);cam.position.set(2.6,1.7,3.2);box.classList.add("ok")},undefined,()=>{});
 const oc=new THREE.OrbitControls(cam,cv);oc.enableDamping=true;oc.autoRotate=!rm;oc.autoRotateSpeed=1.2;oc.minDistance=2;oc.maxDistance=9;cam.position.set(2.6,1.7,3.2);let vis=1;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(box);
 const rs=()=>{const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};rs();new ResizeObserver(rs).observe(box);
-(function f(){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
+(function f(now=0){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){if(!rm)fishAnimations.forEach(({object,position,rotation,phase})=>{const t=now*.001+phase;object.position.set(position.x+Math.sin(t)*.12,position.y+Math.sin(t*1.7)*.025,position.z+Math.cos(t*.8)*.08);object.rotation.set(rotation.x,rotation.y+Math.sin(t)*.12,rotation.z)});oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
 const renderFacItems = () => FACULTIES_DATA.map(f => `
   <div class="fac-brand-lockup">
     <img src="${f.logo}" alt="${f.name}" class="fac-brand-img" loading="lazy" decoding="async">
@@ -459,17 +461,18 @@ function initLanyardMedal(){
     
     const bracketGeo = new THREE.BoxGeometry(0.55, 0.18, 0.12);
     const bracket = new THREE.Mesh(bracketGeo, goldMat);
+    bracket.position.y = 0.19;
     clampGroup.add(bracket);
     
     const swivelCyl = new THREE.CylinderGeometry(0.06, 0.06, 0.2, 16);
     const swivel = new THREE.Mesh(swivelCyl, goldMat);
-    swivel.position.y = -0.12;
+    swivel.position.y = -0.0001;
     clampGroup.add(swivel);
     
     const hookRingGeo = new THREE.TorusGeometry(0.14, 0.032, 16, 32);
     const hookRing = new THREE.Mesh(hookRingGeo, goldMat);
     hookRing.rotation.y = Math.PI / 2;
-    hookRing.position.y = -0.22;
+    hookRing.position.y = -0.15;
     clampGroup.add(hookRing);
     
     medalGroup.add(clampGroup);
@@ -488,36 +491,85 @@ function initLanyardMedal(){
     }
     
     const strapWidth = 0.44;
+    // Offset titik tempel ujung strap menempel di dalam slot atas bracket geo
+    const strapAttachOffset = new THREE.Vector3(0, 0.04, 0);
     const strapGeo = new THREE.PlaneGeometry(strapWidth, 1, 1, numSegments);
     const strapMesh = new THREE.Mesh(strapGeo, strapMat);
     strapMesh.castShadow = true;
     scene.add(strapMesh);
     
+    const _attachWorld = new THREE.Vector3();
+    const _bracketRight = new THREE.Vector3();
+    const _bracketNormal = new THREE.Vector3();
+    const _deltaOffset = new THREE.Vector3();
+    const _currPos = new THREE.Vector3();
+    const _nextPos = new THREE.Vector3();
+    const _prevPos = new THREE.Vector3();
+    const _tangent = new THREE.Vector3();
+    const _segNormal = new THREE.Vector3();
+    const _side = new THREE.Vector3();
+    const _normAnchor = new THREE.Vector3(0, 0, 1);
+    
     function updateRibbonMesh() {
+      medalGroup.updateMatrixWorld(true);
+      
+      // Posisi bracket di dunia 3D persis di titik tempel
+      _attachWorld.copy(strapAttachOffset);
+      bracket.localToWorld(_attachWorld);
+      
+      // Arah lebar X dan normal Z bracket di ruang dunia
+      _bracketRight.set(1, 0, 0).transformDirection(bracket.matrixWorld).normalize();
+      _bracketNormal.set(0, 0, 1).transformDirection(bracket.matrixWorld).normalize();
+      
+      // Offset penyesuaian dinamis agar ujung strap selalu menempel ke bracket
+      _deltaOffset.subVectors(_attachWorld, points[numSegments]);
+      
       const posAttr = strapGeo.attributes.position;
       for (let i = 0; i <= numSegments; i++) {
-        const curr = points[i];
-        let tangent = new THREE.Vector3(0, -1, 0);
-        if (i < numSegments) tangent.subVectors(points[i + 1], curr).normalize();
-        else tangent.subVectors(curr, points[i - 1]).normalize();
+        const progress = i / numSegments;
+        _currPos.copy(points[i]).addScaledVector(_deltaOffset, progress);
         
-        const side = new THREE.Vector3().crossVectors(tangent, new THREE.Vector3(0, 0, 1)).normalize();
-        if (side.lengthSq() < 0.001) side.set(1, 0, 0);
+        if (i < numSegments) {
+          const nextProg = (i + 1) / numSegments;
+          _nextPos.copy(points[i + 1]).addScaledVector(_deltaOffset, nextProg);
+          _tangent.subVectors(_nextPos, _currPos).normalize();
+        } else {
+          const prevProg = (i - 1) / numSegments;
+          _prevPos.copy(points[i - 1]).addScaledVector(_deltaOffset, prevProg);
+          _tangent.subVectors(_currPos, _prevPos).normalize();
+        }
+        if (_tangent.lengthSq() < 0.0001) _tangent.set(0, -1, 0);
         
-        const widthFactor = (i === numSegments) ? 0.8 : (i === 0 ? 0.9 : 1.0);
+        _segNormal.lerpVectors(_normAnchor, _bracketNormal, progress).normalize();
+        _side.crossVectors(_tangent, _segNormal).normalize();
+        if (_side.lengthSq() < 0.001 || i === numSegments) {
+          _side.lerpVectors(new THREE.Vector3(1, 0, 0), _bracketRight, progress).normalize();
+        }
+        
+        const widthFactor = (i === numSegments) ? 0.78 : (i === 0 ? 0.9 : 1.0);
         const halfW = (strapWidth * widthFactor) / 2;
         
         const vIdx = i * 2;
-        posAttr.setXYZ(vIdx, curr.x - side.x * halfW, curr.y - side.y * halfW, curr.z + 0.01);
-        posAttr.setXYZ(vIdx + 1, curr.x + side.x * halfW, curr.y + side.y * halfW, curr.z + 0.01);
+        posAttr.setXYZ(
+          vIdx,
+          _currPos.x - _side.x * halfW + _segNormal.x * 0.004,
+          _currPos.y - _side.y * halfW + _segNormal.y * 0.004,
+          _currPos.z - _side.z * halfW + _segNormal.z * 0.004
+        );
+        posAttr.setXYZ(
+          vIdx + 1,
+          _currPos.x + _side.x * halfW + _segNormal.x * 0.004,
+          _currPos.y + _side.y * halfW + _segNormal.y * 0.004,
+          _currPos.z + _side.z * halfW + _segNormal.z * 0.004
+        );
       }
       posAttr.needsUpdate = true;
       strapGeo.computeVertexNormals();
     }
     
     function physicsStep(dt) {
-      const gravity = new THREE.Vector3(0, -22.0, 0);
-      const damping = 0.975;
+      const gravity = new THREE.Vector3(0, -28.0, 0);
+      const damping = 0.96;
       
       for (let i = 1; i <= numSegments; i++) {
         if (i === numSegments && isDragging) continue;
@@ -575,7 +627,6 @@ function initLanyardMedal(){
       lastTime = now;
       
       physicsStep(dt);
-      updateRibbonMesh();
       
       const medalPos = points[numSegments];
       const prevPos = points[numSegments - 1];
@@ -599,6 +650,7 @@ function initLanyardMedal(){
       }
       
       medalGroup.rotation.set(tiltX, rotY, tiltZ);
+      updateRibbonMesh();
       renderer.render(scene, camera);
     }
     requestAnimationFrame(animate);
