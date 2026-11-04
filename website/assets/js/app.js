@@ -277,19 +277,14 @@ function initMedal3d(){
    React Bits Style 3D Hanging Lanyard Gold Medal
    ============================================================ */
 const lanyardMedalHTML=()=>`
-<div class="lanyard-stage-wrap medal-viewer-wrap">
-  <div class="medal-viewer-frame">
-    <model-viewer id="awardMedalViewer" src="assets/models/medal_gold.glb" alt="3D Gold Medal WYIE 2026 and MINDS"
-      auto-rotate rotation-per-second="25deg" camera-controls interaction-prompt="auto"
-      shadow-intensity="1.5" shadow-softness="0.8" exposure="1.1" environment-image="neutral"
-      camera-orbit="0deg 80deg 0.14m" field-of-view="30deg"></model-viewer>
-  </div>
+<div class="lanyard-stage-wrap">
+  <div class="lanyard-container" id="lanyardStage"></div>
   <div class="lanyard-glass-bar">
-    <div class="lanyard-tip">✦ Drag untuk melihat detail permukaan 3D · Gunakan tombol untuk memilih sisi medali ✦</div>
+    <div class="lanyard-tip">✦ Sentuh & tarik medali untuk mengayunkan · Klik tombol untuk membalik ke sisi WYIE / MINDS ✦</div>
     <div class="lanyard-controls">
-      <button type="button" id="medalFrontBtn" class="active">Depan (WYIE)</button>
-      <button type="button" id="medalBackBtn">Belakang (MINDS)</button>
-      <button type="button" id="medalSpinBtn">⏸ Jeda Putar</button>
+      <button type="button" id="lanyardFlipBtn">⟲ Balik Sisi Medali (180°)</button>
+      <button type="button" id="lanyardSwingBtn">〰 Ayunkan Medali</button>
+      <button type="button" id="lanyardResetBtn">↺ Posisi Awal</button>
     </div>
   </div>
 </div>`;
@@ -356,31 +351,6 @@ function createStrapCanvasTex() {
 }
 
 function initLanyardMedal(){
-  const viewer = $("#awardMedalViewer");
-  if (viewer) {
-    customElements.whenDefined("model-viewer").then(() => {
-      if (!viewer.isConnected) return;
-      const frontBtn = $("#medalFrontBtn");
-      const backBtn = $("#medalBackBtn");
-      const spinBtn = $("#medalSpinBtn");
-      const selectSide = (orbit, activeBtn) => {
-        viewer.autoRotate = false;
-        viewer.cameraOrbit = orbit;
-        frontBtn?.classList.toggle("active", activeBtn === frontBtn);
-        backBtn?.classList.toggle("active", activeBtn === backBtn);
-        spinBtn?.classList.remove("active");
-        if (spinBtn) spinBtn.textContent = "▶ Putar Otomatis";
-      };
-      if (frontBtn) frontBtn.onclick = () => selectSide("0deg 0deg 0.14m", frontBtn);
-      if (backBtn) backBtn.onclick = () => selectSide("180deg 180deg 0.14m", backBtn);
-      if (spinBtn) spinBtn.onclick = () => {
-        viewer.autoRotate = !viewer.autoRotate;
-        spinBtn.classList.toggle("active", viewer.autoRotate);
-        spinBtn.textContent = viewer.autoRotate ? "⏸ Jeda Putar" : "▶ Putar Otomatis";
-      };
-    });
-    return;
-  }
   const container = $("#lanyardStage");
   if(!container) return;
   load3().then(() => {
