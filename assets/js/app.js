@@ -277,14 +277,19 @@ function initMedal3d(){
    React Bits Style 3D Hanging Lanyard Gold Medal
    ============================================================ */
 const lanyardMedalHTML=()=>`
-<div class="lanyard-stage-wrap">
-  <div class="lanyard-container" id="lanyardStage"></div>
+<div class="lanyard-stage-wrap medal-viewer-wrap">
+  <div class="medal-viewer-frame">
+    <model-viewer id="awardMedalViewer" src="assets/models/medal_gold.glb" alt="3D Gold Medal WYIE 2026 and MINDS"
+      auto-rotate rotation-per-second="25deg" camera-controls interaction-prompt="auto"
+      shadow-intensity="1.5" shadow-softness="0.8" exposure="1.1" environment-image="neutral"
+      camera-orbit="0deg 80deg 0.14m" field-of-view="30deg"></model-viewer>
+  </div>
   <div class="lanyard-glass-bar">
-    <div class="lanyard-tip">✦ Sentuh & tarik medali untuk mengayunkan · Klik tombol untuk membalik ke sisi WYIE / MINDS ✦</div>
+    <div class="lanyard-tip">✦ Drag untuk melihat detail permukaan 3D · Gunakan tombol untuk memilih sisi medali ✦</div>
     <div class="lanyard-controls">
-      <button type="button" id="lanyardFlipBtn">⟲ Balik Sisi Medali (180°)</button>
-      <button type="button" id="lanyardSwingBtn">〰 Ayunkan Medali</button>
-      <button type="button" id="lanyardResetBtn">↺ Posisi Awal</button>
+      <button type="button" id="medalFrontBtn" class="active">Depan (WYIE)</button>
+      <button type="button" id="medalBackBtn">Belakang (MINDS)</button>
+      <button type="button" id="medalSpinBtn">⏸ Jeda Putar</button>
     </div>
   </div>
 </div>`;
@@ -351,6 +356,31 @@ function createStrapCanvasTex() {
 }
 
 function initLanyardMedal(){
+  const viewer = $("#awardMedalViewer");
+  if (viewer) {
+    customElements.whenDefined("model-viewer").then(() => {
+      if (!viewer.isConnected) return;
+      const frontBtn = $("#medalFrontBtn");
+      const backBtn = $("#medalBackBtn");
+      const spinBtn = $("#medalSpinBtn");
+      const selectSide = (orbit, activeBtn) => {
+        viewer.autoRotate = false;
+        viewer.cameraOrbit = orbit;
+        frontBtn?.classList.toggle("active", activeBtn === frontBtn);
+        backBtn?.classList.toggle("active", activeBtn === backBtn);
+        spinBtn?.classList.remove("active");
+        if (spinBtn) spinBtn.textContent = "▶ Putar Otomatis";
+      };
+      if (frontBtn) frontBtn.onclick = () => selectSide("0deg 0deg 0.14m", frontBtn);
+      if (backBtn) backBtn.onclick = () => selectSide("180deg 180deg 0.14m", backBtn);
+      if (spinBtn) spinBtn.onclick = () => {
+        viewer.autoRotate = !viewer.autoRotate;
+        spinBtn.classList.toggle("active", viewer.autoRotate);
+        spinBtn.textContent = viewer.autoRotate ? "⏸ Jeda Putar" : "▶ Putar Otomatis";
+      };
+    });
+    return;
+  }
   const container = $("#lanyardStage");
   if(!container) return;
   load3().then(() => {
@@ -366,116 +396,117 @@ function initLanyardMedal(){
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.3;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
     
-    const ambient = new THREE.AmbientLight(0xfff5e6, 1.25);
+    const envGenerator = new THREE.PMREMGenerator(renderer);
+    envGenerator.compileCubemapShader();
+    const envScene = new THREE.Scene();
+    envScene.background = new THREE.Color(0x261d10);
+    [
+      [0xffedc2, [0, 4, 0], [6, 4]],
+      [0xfff5dc, [0, 0, 4], [5, 4]],
+      [0xffca68, [4, 1, 0], [4, 4]],
+      [0xffdfa0, [0, 1, -4], [5, 3]]
+    ].forEach(([color, position, size]) => {
+      const panel = new THREE.Mesh(
+        new THREE.PlaneGeometry(size[0], size[1]),
+        new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide })
+      );
+      panel.position.set(position[0], position[1], position[2]);
+      panel.lookAt(0, 0, 0);
+      envScene.add(panel);
+    });
+    const studioEnv = envGenerator.fromScene(envScene, 0.04).texture;
+    scene.environment = studioEnv;
+    envGenerator.dispose();
+
+    // 5-Point Studio Lighting Rig dari scene Blender WYIE MINDS
+    const ambient = new THREE.AmbientLight(0xfff6e8, 1.1);
     scene.add(ambient);
-    
-    const keyLight = new THREE.DirectionalLight(0xfff8e8, 2.2);
-    keyLight.position.set(4, 8, 6);
+
+    // Studio_Key: Cahaya utama hangat keemasan
+    const keyLight = new THREE.DirectionalLight(0xffebd1, 2.7);
+    keyLight.position.set(2.7, 3.1, 4.6);
     keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
     
-    const rimLight = new THREE.DirectionalLight(0xd4eaff, 1.6);
-    rimLight.position.set(-6, -2, -5);
-    scene.add(rimLight);
-    
-    const fillLight = new THREE.DirectionalLight(0xffd700, 0.9);
-    fillLight.position.set(0, -6, 4);
+    // Studio_Fill: Cahaya pengisi sejuk lembut
+    const fillLight = new THREE.DirectionalLight(0xf2f2ff, 1.8);
+    fillLight.position.set(-3.1, -1.9, 3.9);
     scene.add(fillLight);
     
-    const texLoader = new THREE.TextureLoader();
-    const frontTex = texLoader.load("assets/img/medal-back.png");
-    const backTex = texLoader.load("assets/img/medal-front.png");
-    frontTex.encoding = THREE.sRGBEncoding;
-    backTex.encoding = THREE.sRGBEncoding;
+    // Studio_Rim: Cahaya rim atas berkilau tinggi
+    const rimLight = new THREE.DirectionalLight(0xfffae6, 3.2);
+    rimLight.position.set(0.0, 5.8, 1.9);
+    scene.add(rimLight);
+    
+    // Studio_Back: Kilap sisi belakang saat medali dibalik/diputar
+    const backLight = new THREE.DirectionalLight(0xfff2e0, 2.4);
+    backLight.position.set(-1.9, 1.5, -4.6);
+    scene.add(backLight);
+    
+    // Top_Accent: Aksen cahaya pada lubang hanger medali & pangkal pita
+    const topAccent = new THREE.DirectionalLight(0xfff2d9, 2.0);
+    topAccent.position.set(0.0, 3.1, 3.9);
+    scene.add(topAccent);
+    
     const strapTex = createStrapCanvasTex();
-    
-    const goldMat = new THREE.MeshStandardMaterial({
-      color: 0xdfb738,
-      metalness: 0.96,
-      roughness: 0.18,
-      envMapIntensity: 1.5
-    });
-    
-    const frontMat = new THREE.MeshStandardMaterial({
-      map: frontTex,
-      metalness: 0.85,
-      roughness: 0.25,
-      bumpScale: 0.05
-    });
-    
-    const backMat = new THREE.MeshStandardMaterial({
-      map: backTex,
-      metalness: 0.85,
-      roughness: 0.25,
-      bumpScale: 0.05
-    });
-    
     const strapMat = new THREE.MeshStandardMaterial({
       map: strapTex,
       side: THREE.DoubleSide,
-      roughness: 0.85,
+      roughness: 0.82,
       metalness: 0.08
     });
     
     const medalGroup = new THREE.Group();
     const medalRadius = 1.35;
-    const medalThickness = 0.14;
     
-    const frontGeo = new THREE.CircleGeometry(medalRadius, 64);
-    const frontMesh = new THREE.Mesh(frontGeo, frontMat);
-    frontMesh.position.z = medalThickness / 2 + 0.002;
-    medalGroup.add(frontMesh);
+    // Titik jangkar slot hanger medal untuk ujung tali lanyard (y = 1.512)
+    const attachAnchor = new THREE.Object3D();
+    attachAnchor.position.set(0, 1.512, 0);
+    medalGroup.add(attachAnchor);
     
-    const backGeo = new THREE.CircleGeometry(medalRadius, 64);
-    const backMesh = new THREE.Mesh(backGeo, backMat);
-    backMesh.rotation.y = Math.PI;
-    backMesh.position.z = -medalThickness / 2 - 0.002;
-    medalGroup.add(backMesh);
-    
-    const rimGeo = new THREE.CylinderGeometry(medalRadius, medalRadius, medalThickness, 64, 1, true);
-    const rimMesh = new THREE.Mesh(rimGeo, goldMat);
-    rimMesh.rotation.x = Math.PI / 2;
-    medalGroup.add(rimMesh);
-    
-    const ringGeo = new THREE.TorusGeometry(medalRadius - 0.02, 0.038, 16, 64);
-    const ringFront = new THREE.Mesh(ringGeo, goldMat);
-    ringFront.position.z = medalThickness / 2;
-    medalGroup.add(ringFront);
-    
-    const ringBack = new THREE.Mesh(ringGeo, goldMat);
-    ringBack.position.z = -medalThickness / 2;
-    medalGroup.add(ringBack);
-    
-    const eyeletGeo = new THREE.TorusGeometry(0.16, 0.036, 16, 32);
-    const eyelet = new THREE.Mesh(eyeletGeo, goldMat);
-    eyelet.position.y = medalRadius + 0.12;
-    medalGroup.add(eyelet);
-    
-    const clampGroup = new THREE.Group();
-    clampGroup.position.y = medalRadius + 0.38;
-    
-    const bracketGeo = new THREE.BoxGeometry(0.55, 0.18, 0.12);
-    const bracket = new THREE.Mesh(bracketGeo, goldMat);
-    bracket.position.y = 0.19;
-    clampGroup.add(bracket);
-    
-    const swivelCyl = new THREE.CylinderGeometry(0.06, 0.06, 0.2, 16);
-    const swivel = new THREE.Mesh(swivelCyl, goldMat);
-    swivel.position.y = -0.0001;
-    clampGroup.add(swivel);
-    
-    const hookRingGeo = new THREE.TorusGeometry(0.14, 0.032, 16, 32);
-    const hookRing = new THREE.Mesh(hookRingGeo, goldMat);
-    hookRing.rotation.y = Math.PI / 2;
-    hookRing.position.y = -0.15;
-    clampGroup.add(hookRing);
-    
-    medalGroup.add(clampGroup);
+    let medalModel = null;
+    const gltfLoader = new THREE.GLTFLoader();
+    gltfLoader.load("assets/models/medal_gold.glb", (gltf) => {
+      medalModel = gltf.scene;
+
+      // Orientasi: rotasi X 90° agar sisi depan (WYIE 2026) tegak menghadap kamera dan hanger menghadap ke atas
+      medalModel.rotation.x = Math.PI / 2;
+
+      // Skala menyesuaikan radius medali Three.js (0.035 m -> 1.35 unit)
+      const scale = medalRadius / 0.035;
+      medalModel.scale.set(scale, scale, scale);
+
+      // Konfigurasi material PBR agar kilau emas dan normal map tampil tajam
+      medalModel.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          const mat = child.material;
+          if (mat) {
+            mat.metalness = 0.82;
+            mat.roughness = 0.28;
+            mat.envMapIntensity = 1.6;
+            if (mat.name === "Mat_Medal_Gold") {
+              mat.color.setHex(0xffca42);
+            }
+            if (mat.normalMap) {
+              mat.normalScale.set(1.2, 1.2);
+            }
+          }
+        }
+      });
+
+      medalGroup.add(medalModel);
+    });
     scene.add(medalGroup);
     
     const numSegments = 20;
@@ -491,8 +522,6 @@ function initLanyardMedal(){
     }
     
     const strapWidth = 0.44;
-    // Offset titik tempel ujung strap menempel di dalam slot atas bracket geo
-    const strapAttachOffset = new THREE.Vector3(0, 0.04, 0);
     const strapGeo = new THREE.PlaneGeometry(strapWidth, 1, 1, numSegments);
     const strapMesh = new THREE.Mesh(strapGeo, strapMat);
     strapMesh.castShadow = true;
@@ -513,13 +542,12 @@ function initLanyardMedal(){
     function updateRibbonMesh() {
       medalGroup.updateMatrixWorld(true);
       
-      // Posisi bracket di dunia 3D persis di titik tempel
-      _attachWorld.copy(strapAttachOffset);
-      bracket.localToWorld(_attachWorld);
+      // Titik tempel pas di slot atas hanger medal baru
+      attachAnchor.getWorldPosition(_attachWorld);
       
-      // Arah lebar X dan normal Z bracket di ruang dunia
-      _bracketRight.set(1, 0, 0).transformDirection(bracket.matrixWorld).normalize();
-      _bracketNormal.set(0, 0, 1).transformDirection(bracket.matrixWorld).normalize();
+      // Orientasi lebar X dan normal Z dari medal di ruang dunia
+      _bracketRight.set(1, 0, 0).transformDirection(medalGroup.matrixWorld).normalize();
+      _bracketNormal.set(0, 0, 1).transformDirection(medalGroup.matrixWorld).normalize();
       
       // Offset penyesuaian dinamis agar ujung strap selalu menempel ke bracket
       _deltaOffset.subVectors(_attachWorld, points[numSegments]);
@@ -671,7 +699,8 @@ function initLanyardMedal(){
       const { x, y, clientX } = getEvtCoords(e);
       mouse.set(x, y);
       raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects([frontMesh, backMesh, rimMesh, bracket], true);
+      const targets = medalModel ? [medalModel, strapMesh] : [medalGroup, strapMesh];
+      const hits = raycaster.intersectObjects(targets, true);
       if (hits.length > 0) {
         isDragging = true;
         prevMouseX = clientX;

@@ -156,6 +156,8 @@ footer{padding:48px clamp(20px,5vw,72px) 30px;background:var(--dk);color:#9fb89a
 .medal-hero-intro .eb{color:var(--lime);font-size:1.05rem;letter-spacing:.04em}
 .medal-hero-intro .aw{font-size:clamp(3.4rem,10vw,7.5rem);line-height:0.95;margin:10px 0}
 .lanyard-stage-wrap{position:relative;width:100%;max-width:100%;margin:4px 0 24px;background:none;border:none;border-radius:0;box-shadow:none;display:flex;flex-direction:column;align-items:center;overflow:visible}
+.medal-viewer-frame{width:min(100%,900px);height:clamp(420px,68vh,680px);overflow:hidden;border:1px solid rgba(212,175,55,.24);border-radius:24px;background:radial-gradient(ellipse at 50% 42%,rgba(88,65,28,.32),rgba(8,15,12,.92) 72%);box-shadow:0 24px 70px rgba(0,0,0,.4),0 0 44px rgba(212,175,55,.08)}
+.medal-viewer-frame model-viewer{display:block;width:100%;height:100%;background:transparent;--poster-color:transparent}
 .lanyard-container{width:100%;height:74vh;min-height:560px;max-height:820px;position:relative;cursor:grab;touch-action:none;user-select:none}
 .lanyard-container:active{cursor:grabbing}
 .lanyard-container canvas{width:100%!important;height:100%!important;display:block;outline:none}
@@ -164,7 +166,7 @@ footer{padding:48px clamp(20px,5vw,72px) 30px;background:var(--dk);color:#9fb89a
 .lanyard-controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px;z-index:6}
 .lanyard-controls button{font:600 .88rem "Instrument Sans",sans-serif;padding:.65em 1.4em;border-radius:99px;border:1px solid rgba(255,255,255,.2);background:rgba(18,40,31,.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#F1F8ED;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;display:inline-flex;align-items:center;gap:7px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .lanyard-controls button:hover{background:var(--lime);border-color:var(--lime);color:#12281F;transform:translateY(-2px);box-shadow:0 10px 25px rgba(168,209,63,.35)}
-@media(max-width:768px){.lanyard-container{height:58vh;min-height:460px}.lanyard-tip{font-size:.78rem;padding:0 12px}}
+@media(max-width:768px){.lanyard-container{height:58vh;min-height:460px}.medal-viewer-frame{height:clamp(400px,62vh,560px)}.lanyard-tip{font-size:.78rem;padding:0 12px}}
 
 /* Academic Roots & Innovation Ecosystem - Running Faculty Marquee */
 .fac-section{padding:clamp(60px,8vw,100px) 0;position:relative;overflow:hidden;border-top:1px solid rgba(7,111,184,.18)}
@@ -185,6 +187,5 @@ footer{padding:48px clamp(20px,5vw,72px) 30px;background:var(--dk);color:#9fb89a
 .fac-brand-sub{font-family:"Instrument Sans",sans-serif;font-size:clamp(.72rem,1.05vw,.8rem);color:var(--mut);line-height:1.2;white-space:nowrap}
 @keyframes facMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.fac-marquee-track{animation:none;overflow-x:auto;width:100%}.fac-title-gradient{animation:none}}
-
 
 
