@@ -30,7 +30,7 @@ const im=(n,e="jpg")=>({f:`assets/img/${n}.${e}`,t:`assets/img/thumb/${n}.${e}`}
 const IMG={logo:{f:"assets/img/logo.png",t:"assets/img/logo.png"},dash:im("dashboard"),shot:im("render-3d"),proto:im("prototype"),team:im("award-gold"),booth:im("booth-team"),
  display:im("booth-display"),boothTeam:im("booth-group"),boothFlag:im("booth-flag"),selfie:im("booth-selfie"),selfie2:im("booth-selfie-2"),visitors:im("booth-visitors"),visitors2:im("booth-visitors-2"),guest:im("booth-guest"),
  awBooth:im("award-booth"),ceremony:im("award-ceremony"),stage:im("ceremony-stage"),flag:im("award-flag"),cert:im("award-certificate"),medal:im("medal","png"),medalPhoto:im("medal-photo")};
-const GLB_URL="assets/models/aquasense.glb";
+const GLB_URL="assets/models/alataquasense.glb";
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
 const TL=[["technology-edge-ai","Edge AI"],["technology-computer-vision","Computer vision"],["technology-rag-system","RAG system"],["technology-hardware","Hardware"]];
