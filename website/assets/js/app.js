@@ -5,10 +5,10 @@
 const LOGOS = {
   ub: "assets/img/logo-ub.svg",
   filkom: "assets/img/logo-filkom.png",
-  ft: "assets/img/logo-ft.svg",
-  ftab: "assets/img/logo-ftab.svg",
-  fib: "assets/img/logo-fib.svg",
-  fisip: "assets/img/logo-fisip.svg"
+  ft: "assets/img/logo-ft.webp",
+  ftab: "assets/img/logo-ftab.webp",
+  fib: "assets/img/logo-fib.png",
+  fisip: "assets/img/logo-fisip.webp"
 };
 
 const FACULTIES_DATA = [
@@ -112,18 +112,14 @@ const load3=()=>T3||(T3=LS("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128
 const view3d=()=>`<div class="v3 rv"><img class="po" src="${IMG.shot.f}" alt="3D design of the AQUASENSE rig"><canvas aria-label="Interactive 3D model of the AQUASENSE rig. Drag to rotate."></canvas><small>Drag to rotate · scroll to zoom</small></div>`;
 function boot3(){const box=$(".v3");if(!box)return;const cv=box.querySelector("canvas");load3().then(()=>{const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.outputEncoding=THREE.sRGBEncoding;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=.72;const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,.01,1000),fishAnimations=[];sc.add(new THREE.HemisphereLight(0xc9dcff,0x34402f,.3));const d=new THREE.DirectionalLight(0xffe6c2,.65);d.position.set(3,6,4);sc.add(d);const rim=new THREE.DirectionalLight(0x86b9ff,.7);rim.position.set(-4,2,-3);sc.add(rim);
 new THREE.GLTFLoader().load(GLB_URL,g=>{const m=g.scene;
-[1,2,3].forEach(i=>{const parts=[];m.traverse(o=>{if(o.name.startsWith(`Fish ${i} `))parts.push(o)});if(!parts.length)return;const bounds=new THREE.Box3();parts.forEach(o=>bounds.expandByObject(o));const group=new THREE.Group();m.add(group);group.position.copy(bounds.getCenter(new THREE.Vector3()));parts.forEach(o=>group.attach(o));fishAnimations.push({object:group,position:group.position.clone(),rotation:group.rotation.clone(),phase:(i-1)*2.1})});
+m.traverse(o=>{if(o.name==="LED_Emitter"){const materials=Array.isArray(o.material)?o.material:[o.material];o.material=materials.map(source=>{const mat=source.clone();mat.emissive.set(0xffc45e);mat.emissiveIntensity=.8;return mat})}if(!o.name.startsWith("Fish_Aquasense_"))return;o.updateWorldMatrix(true,false);const center=new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3());o.scale.multiplyScalar(.4);o.updateWorldMatrix(true,false);o.position.add(center.sub(new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3())));fishAnimations.push({object:o,position:o.position.clone(),rotation:o.rotation.clone(),phase:fishAnimations.length*2.1})});
 const bx=new THREE.Box3().setFromObject(m),c=bx.getCenter(new THREE.Vector3()),s=bx.getSize(new THREE.Vector3());m.position.sub(c);const w=new THREE.Group();w.add(m);w.scale.setScalar(2.6/Math.max(s.x,s.y,s.z));const lamp=new THREE.SpotLight(0xffc45e,.7,4.5,Math.PI/4,.75,1.2);lamp.position.set(0,s.y*.48,0);lamp.target.position.set(0,-s.y*.18,0);w.add(lamp,lamp.target);sc.add(w);cam.position.set(2.6,1.7,3.2);box.classList.add("ok")},undefined,()=>{});
 const oc=new THREE.OrbitControls(cam,cv);oc.enableDamping=true;oc.autoRotate=!rm;oc.autoRotateSpeed=1.2;oc.minDistance=2;oc.maxDistance=9;cam.position.set(2.6,1.7,3.2);let vis=1;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(box);
 const rs=()=>{const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};rs();new ResizeObserver(rs).observe(box);
-(function f(now=0){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){if(!rm)fishAnimations.forEach(({object,position,rotation,phase})=>{const t=now*.001+phase;object.position.set(position.x+Math.sin(t)*.12,position.y+Math.sin(t*1.7)*.025,position.z+Math.cos(t*.8)*.08);object.rotation.set(rotation.x,rotation.y+Math.sin(t)*.12,rotation.z)});oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
+(function f(now=0){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){if(!rm)fishAnimations.forEach(({object,position,rotation,phase})=>{const t=now*.001+phase;object.position.set(position.x+Math.sin(t)*.035,position.y+Math.sin(t*1.7)*.008,position.z+Math.cos(t*.8)*.025);object.rotation.set(rotation.x,rotation.y+Math.sin(t)*.12,rotation.z)});oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
 const renderFacItems = () => FACULTIES_DATA.map(f => `
-  <div class="fac-brand-lockup">
-    <img src="${f.logo}" alt="${f.name}" class="fac-brand-img" loading="lazy" decoding="async">
-    <div class="fac-brand-info">
-      <span class="fac-brand-name">${f.name}</span>
-      <span class="fac-brand-sub">${f.desc}</span>
-    </div>
+  <div class="fac-logo-item" title="${f.name} · ${f.desc}" aria-label="${f.name}">
+    <img src="${f.logo}" alt="${f.name}" class="fac-logo-img" loading="lazy" decoding="async">
   </div>
 `).join("");
 
@@ -132,8 +128,8 @@ const part = () => `
   <div class="fac-marquee-mask-left"></div>
   <div class="fac-marquee-mask-right"></div>
   <div class="fac-marquee-track">
-    ${renderFacItems()}
-    ${renderFacItems()}
+    <div class="fac-marquee-group">${renderFacItems()}${renderFacItems()}</div>
+    <div class="fac-marquee-group" aria-hidden="true">${renderFacItems()}${renderFacItems()}</div>
   </div>
 </div>`;
 

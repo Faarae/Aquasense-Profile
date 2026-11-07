@@ -5,10 +5,10 @@
 const LOGOS = {
   ub: "assets/img/logo-ub.svg",
   filkom: "assets/img/logo-filkom.png",
-  ft: "assets/img/logo-ft.svg",
-  ftab: "assets/img/logo-ftab.svg",
-  fib: "assets/img/logo-fib.svg",
-  fisip: "assets/img/logo-fisip.svg"
+  ft: "assets/img/logo-ft.webp",
+  ftab: "assets/img/logo-ftab.webp",
+  fib: "assets/img/logo-fib.png",
+  fisip: "assets/img/logo-fisip.webp"
 };
 
 const FACULTIES_DATA = [
@@ -118,12 +118,8 @@ const oc=new THREE.OrbitControls(cam,cv);oc.enableDamping=true;oc.autoRotate=!rm
 const rs=()=>{const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};rs();new ResizeObserver(rs).observe(box);
 (function f(now=0){if(!cv.isConnected){r.dispose();return}requestAnimationFrame(f);if(vis){if(!rm)fishAnimations.forEach(({object,position,rotation,phase})=>{const t=now*.001+phase;object.position.set(position.x+Math.sin(t)*.035,position.y+Math.sin(t*1.7)*.008,position.z+Math.cos(t*.8)*.025);object.rotation.set(rotation.x,rotation.y+Math.sin(t)*.12,rotation.z)});oc.update();r.render(sc,cam)}})()}).catch(()=>{})}
 const renderFacItems = () => FACULTIES_DATA.map(f => `
-  <div class="fac-brand-lockup">
-    <img src="${f.logo}" alt="${f.name}" class="fac-brand-img" loading="lazy" decoding="async">
-    <div class="fac-brand-info">
-      <span class="fac-brand-name">${f.name}</span>
-      <span class="fac-brand-sub">${f.desc}</span>
-    </div>
+  <div class="fac-logo-item" title="${f.name} · ${f.desc}" aria-label="${f.name}">
+    <img src="${f.logo}" alt="${f.name}" class="fac-logo-img" loading="lazy" decoding="async">
   </div>
 `).join("");
 
@@ -132,8 +128,8 @@ const part = () => `
   <div class="fac-marquee-mask-left"></div>
   <div class="fac-marquee-mask-right"></div>
   <div class="fac-marquee-track">
-    ${renderFacItems()}
-    ${renderFacItems()}
+    <div class="fac-marquee-group">${renderFacItems()}${renderFacItems()}</div>
+    <div class="fac-marquee-group" aria-hidden="true">${renderFacItems()}${renderFacItems()}</div>
   </div>
 </div>`;
 

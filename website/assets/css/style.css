@@ -167,22 +167,18 @@ footer{padding:48px clamp(20px,5vw,72px) 30px;background:var(--dk);color:#9fb89a
 @media(max-width:768px){.lanyard-container{height:58vh;min-height:460px}.lanyard-tip{font-size:.78rem;padding:0 12px}}
 
 /* Academic Roots & Innovation Ecosystem - Running Faculty Marquee */
-.fac-section{padding:clamp(60px,8vw,100px) 0;position:relative;overflow:hidden;border-top:1px solid rgba(7,111,184,.18)}
-.fac-header{text-align:center;margin-bottom:clamp(20px,3.5vw,32px);padding:0 20px}
-.fac-title-wrap{margin:0;font-size:clamp(0.85rem,1.8vw,1.05rem);letter-spacing:.18em;text-transform:uppercase;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-weight:900}
-.fac-title-gradient{display:inline-block;background:linear-gradient(90deg,#076FB8 0%,#EE7797 35%,#FEC958 70%,#076FB8 100%);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientFlow 7s linear infinite}
-@keyframes gradientFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.fac-marquee-container{position:relative;width:100%;overflow:hidden;padding:16px 0}
+.fac-section{padding:clamp(60px,8vw,100px) 0;position:relative;overflow:hidden;border-top:1px solid color-mix(in srgb,var(--water) 25%,transparent)}
+.fac-header{text-align:center;margin-bottom:clamp(22px,3.8vw,36px);padding:0 20px}
+.fac-title-wrap{margin:0;font-size:clamp(0.85rem,1.7vw,1.02rem);letter-spacing:.18em;text-transform:uppercase;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-weight:900}
+.fac-title-gradient{display:inline-block;background:linear-gradient(135deg,var(--water) 0%,var(--lime) 100%);background-size:100% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.fac-marquee-container{position:relative;width:100%;overflow:hidden;padding:18px 0}
 .fac-marquee-mask-left{position:absolute;left:0;top:0;bottom:0;width:clamp(40px,10vw,140px);background:linear-gradient(to right,var(--bg) 0%,transparent 100%);z-index:10;pointer-events:none}
 .fac-marquee-mask-right{position:absolute;right:0;top:0;bottom:0;width:clamp(40px,10vw,140px);background:linear-gradient(to left,var(--bg) 0%,transparent 100%);z-index:10;pointer-events:none}
-.fac-marquee-track{display:flex;align-items:center;gap:clamp(36px,5.5vw,72px);width:max-content;white-space:nowrap;animation:facMarquee 30s linear infinite;will-change:transform}
-.fac-marquee-track:hover{animation-play-state:paused}
-.fac-brand-lockup{display:flex;align-items:center;gap:14px;filter:grayscale(1);opacity:.78;transition:filter .35s ease,opacity .35s ease,transform .35s ease;user-select:none;cursor:default;flex-shrink:0;padding:6px 12px}
-.fac-brand-lockup:hover{filter:grayscale(0);opacity:1;transform:scale(1.06)}
-.fac-brand-img{height:clamp(44px,5.2vw,54px);width:auto;max-width:62px;object-fit:contain;display:block}
-.fac-brand-info{display:flex;flex-direction:column;gap:2px;text-align:left}
-.fac-brand-name{font-family:"Bricolage Grotesque","Instrument Sans",sans-serif;font-weight:800;font-size:clamp(.92rem,1.35vw,1.05rem);color:var(--ink);line-height:1.2;white-space:nowrap}
-.fac-brand-sub{font-family:"Instrument Sans",sans-serif;font-size:clamp(.72rem,1.05vw,.8rem);color:var(--mut);line-height:1.2;white-space:nowrap}
+.fac-marquee-track{display:flex;align-items:center;width:max-content;white-space:nowrap;animation:facMarquee 28s linear infinite;will-change:transform}
+.fac-marquee-group{display:flex;align-items:center;gap:clamp(42px,6vw,84px);padding-right:clamp(42px,6vw,84px);flex-shrink:0}
+.fac-logo-item{display:flex;align-items:center;justify-content:center;height:clamp(48px,5.8vw,58px);filter:grayscale(1);opacity:.8;transition:filter .3s ease,opacity .3s ease,transform .3s ease;user-select:none;cursor:default;flex-shrink:0}
+.fac-logo-item:hover{filter:grayscale(0);opacity:1;transform:scale(1.08)}
+.fac-logo-img{height:100%;width:auto;max-height:clamp(46px,5.5vw,56px);max-width:clamp(110px,16vw,170px);object-fit:contain;display:block}
 @keyframes facMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){.fac-marquee-track{animation:none;overflow-x:auto;width:100%}.fac-title-gradient{animation:none}}
+@media(prefers-reduced-motion:reduce){.fac-marquee-track{animation:none;overflow-x:auto;width:100%}}
 
